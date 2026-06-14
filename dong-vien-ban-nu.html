@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Này bạn ơi 🌸</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Be Vietnam Pro', sans-serif;
+      background: linear-gradient(160deg, #fdf0f7 0%, #f0f4ff 50%, #f0fbf7 100%);
+      min-height: 100vh;
+      padding: 2.5rem 1.5rem;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    .floating-shapes {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .shape {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.12;
+    }
+
+    .s1 { width:220px; height:220px; background:#d4a8e8; top:-60px; left:-60px; }
+    .s2 { width:150px; height:150px; background:#a8c8e8; top:80px; right:20px; }
+    .s3 { width:110px; height:110px; background:#a8e8c8; bottom:250px; left:30px; }
+    .s4 { width:180px; height:180px; background:#e8c8a8; bottom:80px; right:-40px; }
+
+    .content {
+      position: relative;
+      z-index: 1;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    .hero {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .hero-emoji {
+      font-size: 3.5rem;
+      display: block;
+      margin-bottom: 1rem;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    .hero h1 {
+      font-size: 1.7rem;
+      font-weight: 700;
+      color: #7c3aed;
+      margin-bottom: 0.6rem;
+      line-height: 1.3;
+    }
+
+    .hero p {
+      font-size: 1rem;
+      color: #6b7280;
+      line-height: 1.7;
+    }
+
+    .affirmation-card {
+      background: white;
+      border-radius: 20px;
+      padding: 1.5rem 1.75rem;
+      margin-bottom: 1.25rem;
+      border: 0.5px solid rgba(167, 139, 250, 0.3);
+      box-shadow: 0 4px 20px rgba(124, 58, 237, 0.06);
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .affirmation-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 4px; height: 100%;
+      border-radius: 20px 0 0 20px;
+    }
+
+    .affirmation-card.purple::before { background: #7c3aed; }
+    .affirmation-card.pink::before   { background: #ec4899; }
+    .affirmation-card.teal::before   { background: #0d9488; }
+    .affirmation-card.amber::before  { background: #d97706; }
+
+    .affirmation-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 30px rgba(124, 58, 237, 0.12);
+    }
+
+    .affirmation-card.purple:hover { background: #faf5ff; }
+    .affirmation-card.pink:hover   { background: #fff0f7; }
+    .affirmation-card.teal:hover   { background: #f0fdfb; }
+    .affirmation-card.amber:hover  { background: #fffbf0; }
+
+    .card-emoji {
+      font-size: 1.6rem;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+
+    .card-text {
+      font-size: 1.05rem;
+      font-weight: 500;
+      color: #1f2937;
+      line-height: 1.5;
+      margin-bottom: 0.4rem;
+    }
+
+    .card-sub {
+      font-size: 0.875rem;
+      color: #9ca3af;
+      line-height: 1.6;
+    }
+
+    .big-quote {
+      background: linear-gradient(135deg, #7c3aed, #ec4899);
+      border-radius: 20px;
+      padding: 2rem 1.75rem;
+      text-align: center;
+      margin: 1.5rem 0;
+      color: white;
+    }
+
+    .big-quote .quote-text {
+      font-size: 1.15rem;
+      font-weight: 700;
+      line-height: 1.6;
+      margin-bottom: 0.75rem;
+    }
+
+    .big-quote .quote-author {
+      font-size: 0.85rem;
+      opacity: 0.8;
+    }
+
+    .timer-section {
+      background: white;
+      border-radius: 16px;
+      padding: 1.25rem;
+      margin-bottom: 1.25rem;
+      border: 0.5px solid rgba(167, 139, 250, 0.3);
+      text-align: center;
+    }
+
+    .timer-label {
+      font-size: 0.85rem;
+      color: #9ca3af;
+      margin-bottom: 0.5rem;
+    }
+
+    .timer-text {
+      font-size: 1rem;
+      font-weight: 500;
+      color: #7c3aed;
+      transition: opacity 0.4s;
+    }
+
+    .spin {
+      display: inline-block;
+      animation: spin 4s linear infinite;
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .action-btn {
+      display: block;
+      width: 100%;
+      background: linear-gradient(135deg, #7c3aed, #ec4899);
+      color: white;
+      border: none;
+      border-radius: 14px;
+      padding: 1rem;
+      font-size: 1rem;
+      font-weight: 600;
+      font-family: 'Be Vietnam Pro', sans-serif;
+      cursor: pointer;
+      margin: 1.5rem 0 0.75rem;
+      transition: opacity 0.2s, transform 0.15s;
+    }
+
+    .action-btn:hover  { opacity: 0.92; transform: scale(0.99); }
+    .action-btn:active { transform: scale(0.97); }
+
+    .message-box {
+      background: white;
+      border-radius: 16px;
+      padding: 1.25rem 1.5rem;
+      margin-top: 1rem;
+      border: 2px solid #ede9fe;
+      display: none;
+    }
+
+    .message-box.show {
+      display: block;
+      animation: fadeIn 0.4s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .message-box p {
+      font-size: 1rem;
+      color: #374151;
+      line-height: 1.8;
+      text-align: center;
+    }
+
+    .footer-note {
+      text-align: center;
+      margin-top: 2rem;
+      padding-bottom: 1rem;
+      font-size: 0.875rem;
+      color: #9ca3af;
+      line-height: 1.7;
+    }
+
+    .footer-note strong {
+      color: #6b7280;
+    }
+
+    .hearts {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 0.5rem;
+      font-size: 1.1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="floating-shapes">
+    <div class="shape s1"></div>
+    <div class="shape s2"></div>
+    <div class="shape s3"></div>
+    <div class="shape s4"></div>
+  </div>
+
+  <div class="content">
+    <div class="hero">
+      <span class="hero-emoji">🌸</span>
+      <h1>Này bạn ơi,<br>hôm nay thế nào rồi?</h1>
+      <p>Dù ngày hôm nay có tệ đến đâu, bạn vẫn đang ở đây.<br>Và điều đó quan trọng hơn bạn nghĩ nhiều lắm.</p>
+    </div>
+
+    <div class="timer-section">
+      <div class="timer-label"><span class="spin">✨</span> Hít thở sâu một cái đi nào</div>
+      <div class="timer-text" id="breathe-text">Hít vào... thở ra... bạn làm được mà 💜</div>
+    </div>
+
+    <div class="affirmation-card purple">
+      <span class="card-emoji">💪</span>
+      <div class="card-text">Bạn mạnh mẽ hơn cảm giác lúc này rất nhiều</div>
+      <div class="card-sub">Cơn bão nào rồi cũng sẽ qua. Bạn đã vượt qua những ngày như thế này trước đây rồi.</div>
+    </div>
+
+    <div class="affirmation-card pink">
+      <span class="card-emoji">🌷</span>
+      <div class="card-text">Cảm xúc của bạn là hoàn toàn hợp lý</div>
+      <div class="card-sub">Khóc không phải là yếu đuối. Đó là cách cơ thể bạn chữa lành cho chính mình.</div>
+    </div>
+
+    <div class="affirmation-card teal">
+      <span class="card-emoji">🌿</span>
+      <div class="card-text">Ngày tệ không phải là cuộc đời tệ</div>
+      <div class="card-sub">Một trang buồn không thể định nghĩa cả câu chuyện đẹp của bạn đâu nhé.</div>
+    </div>
+
+    <div class="affirmation-card amber">
+      <span class="card-emoji">☀️</span>
+      <div class="card-text">Bạn xứng đáng được yêu thương và tử tế — kể cả từ chính mình</div>
+      <div class="card-sub">Hôm nay, hãy đối xử với bản thân như cách bạn đối xử với người bạn thân nhất.</div>
+    </div>
+
+    <div class="big-quote">
+      <div class="quote-text">"Bạn đã sống sót qua 100% những ngày tệ nhất của mình cho đến giờ. Tỷ lệ đó rất ấn tượng."</div>
+      <div class="quote-author">— Một người muốn bạn biết điều này 🌸</div>
+    </div>
+
+    <button class="action-btn" onclick="showMessage()">Tôi cần một lời động viên ngay lúc này 💌</button>
+
+    <div class="message-box" id="msg-box">
+      <p id="msg-text"></p>
+    </div>
+
+    <div class="footer-note">
+      Gấp máy lại, uống ly nước, và nhớ rằng:<br>
+      <strong>bạn không phải đi qua ngày này một mình.</strong>
+      <div class="hearts">💜 🌸 💙 🌿 💛</div>
+    </div>
+  </div>
+
+  <script>
+    const messages = [
+      "Này bạn — bạn đang làm tốt hơn bạn nghĩ rất nhiều đó. Ngày hôm nay dù khó đến đâu, bạn vẫn đang cố gắng. Và điều đó đã là can đảm rồi. 💜",
+      "Biết không, những người mạnh mẽ nhất không phải là người không bao giờ gục ngã — mà là người tự nhủ 'mình sẽ thử lại một lần nữa' dù mệt mỏi. Bạn chính là người đó. 🌸",
+      "Hôm nay có thể bạn chưa làm được mọi thứ. Nhưng bạn đã thức dậy, đã tiếp tục. Đó là đủ rồi. Đó là hơn đủ rồi. ✨",
+      "Nếu ai đó mà bạn yêu quý đang có một ngày tệ như bạn, bạn sẽ nói gì với họ? Hãy nói điều đó với chính mình đi — bạn cũng xứng đáng nghe những lời đó. 🌿",
+      "Bạn không cần phải 'vui vẻ' mọi lúc. Hãy để mình cảm nhận những gì đang cảm nhận, rồi nhẹ nhàng bước tiếp. Bạn không cần phải hoàn hảo để đáng yêu. 💛",
+      "Ngày mai sẽ khác. Không nhất thiết là hoàn hảo — nhưng sẽ khác. Và có một phiên bản của bạn đang ở đó, chờ bạn đến. 🌈"
+    ];
+
+    let lastIdx = -1;
+
+    function showMessage() {
+      let idx;
+      do { idx = Math.floor(Math.random() * messages.length); }
+      while (idx === lastIdx && messages.length > 1);
+      lastIdx = idx;
+
+      const box = document.getElementById('msg-box');
+      const txt = document.getElementById('msg-text');
+      box.classList.remove('show');
+      setTimeout(() => {
+        txt.textContent = messages[idx];
+        box.classList.add('show');
+        box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 100);
+    }
+
+    const breathePhrases = [
+      "Hít vào... thở ra... bạn làm được mà 💜",
+      "Dừng lại một chút — bạn xứng đáng được nghỉ ngơi 🌸",
+      "Buông tay ra, thở sâu, mọi thứ sẽ ổn thôi ✨",
+      "Bạn không cần phải vội — cứ từ từ thôi nào 🌿"
+    ];
+
+    let bIdx = 0;
+    setInterval(() => {
+      bIdx = (bIdx + 1) % breathePhrases.length;
+      const el = document.getElementById('breathe-text');
+      el.style.opacity = '0';
+      setTimeout(() => {
+        el.textContent = breathePhrases[bIdx];
+        el.style.opacity = '1';
+      }, 400);
+    }, 4000);
+  </script>
+</body>
+</html>
