@@ -1,12 +1,18 @@
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
-#bg-game{width:100%;min-height:720px;background:#0a0f1a;border-radius:16px;overflow:hidden;position:relative;font-family:'Georgia',serif;}
-#bg-panel{position:relative;z-index:5;display:flex;flex-direction:column;align-items:center;}
+html, body {
+  width: 100%;
+  height: 100%;
+  background: #000;
+}
+#bg-game{width:100%;height:100vh;min-height:720px;background:#0a0f1a;overflow:hidden;position:relative;font-family:'Georgia',serif;}
+#bg-panel{position:relative;z-index:5;display:flex;flex-direction:column;align-items:center; padding:20px 10px; height:100%;}
 #bg-hdr{text-align:center;padding:26px 20px 0;width:100%;}
 #bg-ct{color:#93c5fd;font-size:11px;letter-spacing:3px;font-family:sans-serif;margin-bottom:5px;}
-#bg-cn{color:#e0f2fe;font-size:20px;line-height:1.4;}
-#bg-art{margin:18px auto 0;width:280px;height:170px;flex-shrink:0;}
+#bg-cn{color:#e0f2fe;font-size: 20px;line-height:1.4;}
+#bg-art{margin:18px auto 0;width:90%;max-width:320px;height:auto;flex-shrink:0;}
+#bg-art svg { width:100%; height:auto; }
 #bg-narr{max-width:520px;width:90%;margin:16px auto 0;text-align:center;}
 .bg-l{color:#bfdbfe;font-size:15px;line-height:1.85;opacity:0;transform:translateY(8px);transition:opacity .5s,transform .5s;font-style:italic;display:block;margin:2px 0;}
 .bg-l.v{opacity:1;transform:none;}
