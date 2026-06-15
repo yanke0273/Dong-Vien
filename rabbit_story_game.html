@@ -534,21 +534,71 @@ function selectClock(type){
   let allRevealed=Object.values(clockRevealed).every(v=>v);
   
   if(allRevealed){
-    clockSolved=true;
-    fb.innerHTML=`<strong style="color:#fde68a">Phán xét:</strong><br>
+    fb.innerHTML=`<strong style="color:#fde68a">Đã nghe hết ba chiếc!</strong><br><br>
     Vàng nói: "Ta là tương lai."<br>
     Bạc nói: "Đen đang nói dối."<br>
     Đen nói: "Ta là quá khứ."<br><br>
-    Nếu Vàng = tương lai → Đen = quá khứ (đúng) → Bạc tố Đen dối là <em>sai</em>.<br>
-    Nếu Đen = quá khứ (đúng) → Bạc nói Đen dối → Bạc dối.<br>
-    Vậy chỉ một người nói thật: <strong style="color:#86efac">Đồng hồ Bạc</strong> — vì Đen thực sự nói thật về quá khứ, còn Bạc tố oan nó.<br><br>
-    <em>Khoan — thực ra logic đảo:</em> Nếu Bạc nói thật → Đen dối → Đen không phải quá khứ → Vàng dối → Vàng không phải tương lai → Chỉ Bạc không mâu thuẫn. <strong style="color:#86efac">✓ Đồng hồ Bạc nói thật.</strong>`;
+    <strong style="color:#a78bfa">Chỉ một chiếc nói thật. Bạn nghĩ chiếc nào?</strong>`;
     fb.classList.add('show');
-    document.getElementById('choices').innerHTML=`<button class="choice-btn correct" onclick="goTo('ch2')">Cánh cổng mở ra... Bước tiếp →</button>`;
+    
+    // Add choice buttons
+    const choicesEl=document.getElementById('choices');
+    choicesEl.innerHTML=`
+      <button class="choice-btn" onclick="chooseAnswer('gold')">Đồng hồ Vàng</button>
+      <button class="choice-btn" onclick="chooseAnswer('silver')">Đồng hồ Bạc</button>
+      <button class="choice-btn" onclick="chooseAnswer('black')">Đồng hồ Đen</button>
+    `;
   } else {
     fb.innerHTML=`<strong style="color:#fde68a">${info.label}</strong> thì thầm: <em style="color:#c4b5fd">${info.text}</em><br><small style="color:#9ca3af">Hãy nhấn vào tất cả đồng hồ trước khi phán xét.</small>`;
     fb.classList.add('show');
   }
+}
+
+function chooseAnswer(type){
+  clockSolved=true;
+  const fb=document.getElementById('feedback-box');
+  const choicesEl=document.getElementById('choices');
+  
+  // Disable all buttons and mark the selected one
+  const buttons=choicesEl.querySelectorAll('.choice-btn');
+  buttons.forEach((btn,idx)=>{
+    btn.disabled=true;
+    const btnTypes=['gold','silver','black'];
+    if(btnTypes[idx]===type){
+      btn.classList.add(type==='silver'?'correct':'wrong');
+    }
+  });
+  
+  // Show full explanation
+  if(type==='silver'){
+    fb.innerHTML=`<strong style="color:#86efac">✓ Đúng rồi!</strong><br><br>
+    Vàng nói: "Ta là tương lai."<br>
+    Bạc nói: "Đen đang nói dối."<br>
+    Đen nói: "Ta là quá khứ."<br><br>
+    Nếu Bạc nói thật → Đen dối → Đen không phải quá khứ → Vàng dối → Vàng không phải tương lai → Chỉ Bạc không mâu thuẫn.<br><br>
+    <strong style="color:#86efac">Đồng hồ Bạc là chiếc nói thật!</strong>`;
+  } else {
+    fb.innerHTML=`<strong style="color:#fca5a5">Sai rồi...</strong><br><br>
+    Vàng nói: "Ta là tương lai."<br>
+    Bạc nói: "Đen đang nói dối."<br>
+    Đen nói: "Ta là quá khứ."<br><br>
+    Nếu ${type==='gold'?'Vàng':'Đen'} nói thật → sẽ có hai người nói thật → không hợp lệ (chỉ một chiếc nói thật).<br><br>
+    <strong style="color:#a78bfa">Thử nghĩ lại nhé!</strong> Hãy chọn chiếc Bạc.`;
+    // Let user try again (only if they got it wrong)
+    setTimeout(()=>{
+      buttons.forEach(btn=>{
+        btn.disabled=false;
+        btn.classList.remove('wrong','correct');
+      });
+      clockSolved=false;
+    },2000);
+    return; // Don't show the next button yet
+  }
+  
+  fb.classList.add('show');
+  setTimeout(()=>{
+    choicesEl.innerHTML=`<button class="choice-btn correct" onclick="goTo('ch2')">Cánh cổng mở ra... Bước tiếp →</button>`;
+  },1500);
 }
 
 let mirrorDone=false;

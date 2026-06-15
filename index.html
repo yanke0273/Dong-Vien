@@ -25,12 +25,7 @@
       background: linear-gradient(180deg, #0a0520 0%, #1a0a3e 40%, #2d1b69 70%, #1a3a2a 100%);
       cursor: default;
       font-family: 'Georgia', serif;
-      animation: worldPulse 8s ease-in-out infinite;
-      will-change: filter;
-    }
-    @keyframes worldPulse {
-      0%, 100% { filter: brightness(1); }
-      50% { filter: brightness(1.05); }
+      content-visibility: auto;
     }
 
     /* MOON STYLES */
@@ -141,8 +136,10 @@
       position: absolute;
       border-radius: 50%;
       background: white;
-      box-shadow: 0 0 8px white;
+      box-shadow: 0 0 4px white;
       animation: twinkle var(--dur, 2s) ease-in-out infinite;
+      will-change: opacity, transform;
+      backface-visibility: hidden;
     }
     @keyframes twinkle {
       0%, 100% { opacity: 0.2; transform: scale(1); box-shadow: 0 0 4px white; }
@@ -196,12 +193,13 @@
       border-radius: 50%;
       pointer-events: none;
       animation: floatUp var(--dur) ease-out forwards;
+      will-change: transform, opacity;
+      backface-visibility: hidden;
     }
     @keyframes floatUp {
       0% { 
         opacity: 1; 
         transform: translate(0, 0) scale(1);
-        filter: brightness(1.2);
       }
       50% {
         opacity: 1;
@@ -333,6 +331,8 @@
       pointer-events: none;
       animation: floatLeaf var(--d) ease-in-out infinite;
       opacity: 0.7;
+      will-change: transform, opacity;
+      backface-visibility: hidden;
     }
     @keyframes floatLeaf {
       0% { transform: translateY(0) rotate(0deg); opacity: 0.7; }
@@ -346,14 +346,36 @@
       width: 4px; height: 4px;
       border-radius: 50%;
       background: #bbf7d0;
-      box-shadow: 0 0 6px #4ade80, 0 0 12px #86efac;
+      box-shadow: 0 0 4px #4ade80;
       animation: drift var(--d) ease-in-out infinite;
       pointer-events: none;
+      will-change: transform, opacity;
+      backface-visibility: hidden;
     }
     @keyframes drift {
       0%, 100% { transform: translate(0,0); opacity: 0.2; }
       25% { transform: translate(var(--mx),var(--my)); opacity: 1; }
       75% { transform: translate(calc(var(--mx) * -0.5), calc(var(--my) * 1.5)); opacity: 0.6; }
+    }
+    
+    /* Moon particles */
+    .moon-particle {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      animation: floatUp var(--d) ease-out forwards;
+      opacity: 0;
+      will-change: transform, opacity;
+      backface-visibility: hidden;
+    }
+    
+    /* Dark realm stars */
+    .dr-star {
+      position: absolute;
+      border-radius: 50%;
+      animation: twinkle var(--d) ease-in-out infinite;
+      will-change: opacity, transform;
+      backface-visibility: hidden;
     }
   </style>
 </head>
@@ -609,27 +631,26 @@ function openDoor() {
   const world = getEl('world');
 
   // Spawn warm glowing particles (float up gently)
-  for (let i = 0; i < 35; i++) {
+  for (let i = 0; i < 8; i++) { // Giảm từ 15 xuống 8
     const p = document.createElement('div');
     p.className = 'particle';
-    const size = 2 + Math.random() * 5;
+    const size = 2 + Math.random() * 3;
     const colors = ['#fef3c7', '#fde68a', '#fbbf24', '#f59e0b', '#fcd34d'];
     const color = colors[Math.floor(Math.random() * colors.length)];
-    const tx = (Math.random() - 0.5) * 150;
-    const ty = -100 - Math.random() * 200;
-    const dur = 1.2 + Math.random() * 1.5;
+    const tx = (Math.random() - 0.5) * 100;
+    const ty = -60 - Math.random() * 100;
+    const dur = 1.5 + Math.random() * 1.2;
     p.style.left = '50%';
     p.style.top = '50%';
     p.style.width = `${size}px`;
     p.style.height = `${size}px`;
     p.style.borderRadius = '50%';
     p.style.background = color;
-    p.style.boxShadow = `0 0 ${size*2}px ${color}`;
     p.style.setProperty('--tx', `${tx}px`);
     p.style.setProperty('--ty', `${ty}px`);
     p.style.setProperty('--dur', `${dur}s`);
     world.appendChild(p);
-    setTimeout(() => p.remove(), 2500);
+    setTimeout(() => p.remove(), 2200);
   }
 
   // Hide door and show forest
@@ -644,16 +665,16 @@ function openDoor() {
     if (!drStarsCreated) {
       const drStars = getEl('dr-stars');
       const drColors = ['#c4b5fd','#f0abfc','#818cf8','#a78bfa','#e879f9'];
-      for(let i = 0; i < 65; i++) {
+      for(let i = 0; i < 30; i++) { // Giảm từ 65 xuống 30
         const s = document.createElement('div');
         s.className = 'dr-star';
-        const sz = 1 + Math.random() * 3;
+        const sz = 1 + Math.random() * 2;
         s.style.left = `${Math.random() * 100}%`;
         s.style.top = `${Math.random() * 100}%`;
         s.style.width = `${sz}px`;
         s.style.height = `${sz}px`;
         s.style.background = drColors[i % 5];
-        s.style.setProperty('--d', `${1.5 + Math.random() * 4}s`);
+        s.style.setProperty('--d', `${2 + Math.random() * 3}s`);
         s.style.animationDelay = `${Math.random() * 5}s`;
         drStars.appendChild(s);
       }
@@ -665,14 +686,14 @@ function openDoor() {
 // Create stars (only once!)
 if (!starsCreated) {
   const world = getEl('world');
-  for (let i = 0; i < 80; i++) {
+  for (let i = 0; i < 25; i++) { // Giảm từ 40 xuống 25
     const star = document.createElement('div');
     star.className = 'star';
     star.style.left = `${Math.random() * 100}%`;
     star.style.top = `${Math.random() * 60}%`;
-    star.style.width = `${1 + Math.random() * 2}px`;
+    star.style.width = `${1 + Math.random() * 1.2}px`;
     star.style.height = star.style.width;
-    star.style.setProperty('--dur', `${1 + Math.random() * 3}s`);
+    star.style.setProperty('--dur', `${3 + Math.random() * 3}s`); // Tăng duration để mượt hơn
     star.style.animationDelay = `${Math.random() * 2}s`;
     world.appendChild(star);
   }
@@ -682,14 +703,14 @@ if (!starsCreated) {
 // Create fireflies (only once!)
 if (!firefliesCreated) {
   const forest = getEl('forest');
-  for (let i = 0; i < 15; i++) {
+  for (let i = 0; i < 4; i++) { // Giảm từ 7 xuống 4
     const firefly = document.createElement('div');
     firefly.className = 'firefly';
     firefly.style.left = `${10 + Math.random() * 80}%`;
     firefly.style.top = `${20 + Math.random() * 70}%`;
-    firefly.style.setProperty('--d', `${3 + Math.random() * 4}s`);
-    firefly.style.setProperty('--mx', `${-30 + Math.random() * 60}px`);
-    firefly.style.setProperty('--my', `${-20 + Math.random() * 40}px`);
+    firefly.style.setProperty('--d', `${5 + Math.random() * 3}s`); // Tăng duration để mượt hơn
+    firefly.style.setProperty('--mx', `${-20 + Math.random() * 40}px`);
+    firefly.style.setProperty('--my', `${-15 + Math.random() * 30}px`);
     firefly.style.animationDelay = `${Math.random() * 3}s`;
     forest.appendChild(firefly);
   }
@@ -815,18 +836,17 @@ function shake(el) {
 function spawnParticles() {
   const colors=['#a855f7','#f0abfc','#fbbf24','#86efac','#93c5fd','#f9a8d4'];
   const forest = getEl('forest');
-  for(let i=0; i<14; i++) {
+  for(let i=0; i<4; i++) { // Giảm từ 7 xuống 4
     const p=document.createElement('div'); p.className='moon-particle';
     const angle=Math.random()*Math.PI*2;
     const dist=60+Math.random()*80;
     const col=colors[Math.floor(Math.random()*colors.length)];
-    const sz=3+Math.random()*6;
+    const sz=2+Math.random()*3; // Giảm size
     p.style.left=`${55+Math.cos(angle)*dist}px`;
     p.style.top=`${55+Math.sin(angle)*dist}px`;
     p.style.width=`${sz}px`;
     p.style.height=`${sz}px`;
     p.style.background=col;
-    p.style.boxShadow=`0 0 ${sz*2}px ${col}`;
     forest.appendChild(p);
     setTimeout(()=>p.remove(), 1200);
   }
