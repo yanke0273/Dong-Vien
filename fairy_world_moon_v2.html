@@ -1,0 +1,589 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:transparent;}
+#app{
+  width:100%;height:700px;position:relative;
+  font-family:'Georgia',serif;overflow:hidden;
+  background:linear-gradient(180deg,#050210 0%,#120830 50%,#0d1f0a 100%);
+  border-radius:16px;
+}
+
+/* Stars */
+.star{position:absolute;border-radius:50%;background:white;animation:tw var(--d) ease-in-out infinite;}
+@keyframes tw{0%,100%{opacity:.15}50%{opacity:.9}}
+
+/* Title */
+#title-wrap{position:absolute;top:38px;left:0;right:0;text-align:center;z-index:5;}
+#main-title{color:#fef3c7;font-size:22px;text-shadow:0 0 24px #f59e0b;letter-spacing:2px;}
+#main-sub{color:#a78bfa;font-size:11px;letter-spacing:3px;font-family:sans-serif;margin-top:5px;}
+
+/* Moon container */
+#moon-wrap{
+  position:absolute;
+  top:120px;left:50%;transform:translateX(-50%);
+  width:110px;height:110px;
+  cursor:pointer;
+  z-index:10;
+}
+
+/* Moon glow ring - only on hover */
+#moon-glow{
+  position:absolute;inset:-18px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(254,243,199,.18) 0%,transparent 70%);
+  opacity:0;
+  transition:opacity .6s ease;
+  pointer-events:none;
+}
+#moon-wrap:hover #moon-glow{opacity:1;}
+
+/* Moon body */
+#moon-body{
+  width:110px;height:110px;border-radius:50%;
+  background:radial-gradient(circle at 36% 32%, #fffbeb, #fef3c7 38%, #fde68a 70%, #f59e0b 100%);
+  box-shadow:0 0 28px rgba(253,230,138,.3),0 0 55px rgba(251,191,36,.15);
+  position:relative;overflow:hidden;
+  transition:box-shadow .4s;
+}
+#moon-wrap:hover #moon-body{
+  box-shadow:0 0 40px rgba(253,230,138,.5),0 0 80px rgba(251,191,36,.28);
+}
+
+/* Craters */
+.crater{
+  position:absolute;border-radius:50%;
+  background:rgba(180,140,0,.18);
+  border:1px solid rgba(180,140,0,.1);
+}
+
+/* SVG face layer */
+#moon-face{
+  position:absolute;inset:0;
+  opacity:0;
+  transition:opacity .5s ease;
+  pointer-events:none;
+}
+#moon-wrap:hover #moon-face{opacity:1;}
+
+/* Animals */
+#animals{
+  position:absolute;bottom:40px;left:0;right:0;
+  display:flex;justify-content:center;gap:16px;flex-wrap:wrap;
+  padding:0 20px;z-index:5;
+}
+.a-card{
+  background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.16);
+  border-radius:15px;padding:14px 18px;text-align:center;
+  cursor:pointer;transition:all .3s;min-width:105px;
+}
+.a-card:hover{
+  background:rgba(255,255,255,.16);transform:translateY(-6px);
+  box-shadow:0 10px 28px rgba(168,85,247,.35);
+  border-color:rgba(255,255,255,.35);
+}
+.a-emoji{font-size:30px;display:block;margin-bottom:6px;}
+.a-name{color:#f0e6ff;font-size:11px;font-weight:600;letter-spacing:.5px;}
+.a-genre{color:#a78bfa;font-size:10px;margin-top:2px;}
+
+/* Floating particles */
+.particle{
+  position:absolute;border-radius:50%;
+  pointer-events:none;
+  animation:floatUp var(--d) ease-out infinite;
+  opacity:0;
+}
+@keyframes floatUp{
+  0%{transform:translateY(0) scale(1);opacity:0;}
+  20%{opacity:.7;}
+  100%{transform:translateY(-120px) scale(.3);opacity:0;}
+}
+
+/* Evil flash */
+#flash{position:absolute;inset:0;background:white;opacity:0;pointer-events:none;z-index:200;border-radius:16px;}
+
+/* Dark realm */
+#dark-realm{
+  position:absolute;inset:0;border-radius:16px;
+  background:radial-gradient(ellipse at 50% 0%,#1a0030,#06001a 50%,#000008 100%);
+  opacity:0;pointer-events:none;z-index:100;
+  transition:opacity .8s ease;overflow:hidden;
+}
+#dark-realm.show{opacity:1;pointer-events:all;}
+.dr-star{position:absolute;border-radius:50%;animation:tw var(--d) ease-in-out infinite;}
+#dr-moon{
+  position:absolute;top:22px;left:50%;transform:translateX(-50%);
+  width:72px;height:72px;border-radius:50%;
+  background:radial-gradient(circle at 36% 32%,#fffbeb,#fde68a 60%,#ca8a04);
+  box-shadow:0 0 40px rgba(253,230,138,.5);
+  cursor:pointer;transition:transform .3s;
+}
+#dr-moon:hover{transform:translateX(-50%) scale(1.08);}
+#dr-content{
+  position:absolute;inset:0;z-index:5;
+  display:flex;flex-direction:column;align-items:center;
+  padding-top:115px;overflow-y:auto;padding-bottom:30px;
+}
+#dr-title{color:#ede9fe;font-size:18px;text-align:center;text-shadow:0 0 18px #9333ea;letter-spacing:2px;margin-bottom:4px;}
+#dr-sub{color:#7c3aed;font-size:11px;letter-spacing:3px;font-family:sans-serif;margin-bottom:22px;}
+#dr-narr{max-width:460px;width:90%;text-align:center;margin-bottom:18px;}
+.dr-l{color:#ddd6fe;font-size:14px;line-height:1.9;opacity:0;transform:translateY(8px);transition:opacity .6s,transform .6s;display:block;font-style:italic;margin:2px 0;}
+.dr-l.v{opacity:1;transform:none;}
+.dr-l.h{color:#f0abfc;font-style:normal;}
+#dr-ch{max-width:460px;width:90%;display:flex;flex-direction:column;gap:10px;}
+.dr-btn{background:rgba(120,0,180,.12);border:1px solid rgba(168,85,247,.35);border-radius:12px;color:#ddd6fe;font-size:14px;padding:13px 18px;cursor:pointer;font-family:'Georgia',serif;text-align:left;transition:all .25s;line-height:1.5;}
+.dr-btn:hover{background:rgba(120,0,180,.28);border-color:#a855f7;transform:translateX(4px);}
+.dr-btn.ok{border-color:#4ade80;background:rgba(74,222,128,.1);color:#bbf7d0;}
+.dr-btn.no{border-color:#f87171;background:rgba(248,113,113,.1);color:#fca5a5;}
+.dr-btn:disabled{cursor:default;transform:none;}
+#dr-fb{max-width:460px;width:90%;margin:12px auto 0;background:rgba(80,0,120,.2);border:1px solid rgba(168,85,247,.35);border-radius:14px;padding:15px 18px;color:#ddd6fe;font-size:13px;line-height:1.7;font-family:sans-serif;display:none;}
+#dr-fb.s{display:block;}
+#dr-inp{max-width:460px;width:90%;margin:14px auto 0;display:none;}
+#dr-txt{width:100%;background:rgba(80,0,120,.2);border:1px solid rgba(168,85,247,.4);border-radius:12px;color:#e9d5ff;font-size:14px;padding:12px 16px;font-family:'Georgia',serif;resize:none;height:72px;outline:none;}
+#dr-txt:focus{border-color:#a855f7;}
+#dr-txt::placeholder{color:rgba(196,181,253,.35);}
+.dr-sub{margin-top:10px;width:100%;background:rgba(120,0,180,.2);border:1px solid rgba(168,85,247,.45);border-radius:12px;color:#e9d5ff;font-size:14px;padding:11px;cursor:pointer;font-family:'Georgia',serif;transition:all .25s;}
+.dr-sub:hover{background:rgba(120,0,180,.4);}
+#dr-escape{position:absolute;bottom:14px;right:14px;z-index:10;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#6b7280;font-size:11px;padding:6px 12px;cursor:pointer;font-family:sans-serif;transition:all .2s;}
+#dr-escape:hover{color:#9ca3af;}
+.orb{position:absolute;border-radius:50%;filter:blur(22px);animation:orbF var(--d) ease-in-out infinite;pointer-events:none;}
+@keyframes orbF{0%,100%{transform:translate(0,0)}50%{transform:translate(var(--mx),var(--my))}}
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="flash"></div>
+
+  <!-- Stars -->
+  <div id="star-layer"></div>
+
+  <!-- Title -->
+  <div id="title-wrap">
+    <div id="main-title">Thế Giới Của Những Câu Chuyện</div>
+    <div id="main-sub">✦ chọn người dẫn đường của bạn ✦</div>
+  </div>
+
+  <!-- Moon -->
+  <div id="moon-wrap" onclick="moonClick()">
+    <div id="moon-glow"></div>
+    <div id="moon-body">
+      <!-- craters -->
+      <div class="crater" style="width:18px;height:18px;top:18px;left:22px;"></div>
+      <div class="crater" style="width:10px;height:10px;top:38px;right:18px;"></div>
+      <div class="crater" style="width:14px;height:14px;bottom:22px;left:30px;"></div>
+      <div class="crater" style="width:8px;height:8px;bottom:30px;right:25px;"></div>
+    </div>
+    <!-- Face - shown on hover, changes on click -->
+    <svg id="moon-face" viewBox="0 0 110 110" xmlns="http://www.w3.org/2000/svg">
+      <!-- Eyes -->
+      <g id="eye-l-g"><ellipse id="eye-l" cx="38" cy="44" rx="7" ry="7" fill="#92400e"/></g>
+      <g id="eye-r-g"><ellipse id="eye-r" cx="72" cy="44" rx="7" ry="7" fill="#92400e"/></g>
+      <!-- Mouth -->
+      <path id="mouth" d="M38 68 Q55 80 72 68" fill="none" stroke="#92400e" stroke-width="3" stroke-linecap="round"/>
+      <!-- Eyebrows (hidden at stage 0) -->
+      <path id="brow-l" d="M30 34 Q38 30 46 34" fill="none" stroke="#92400e" stroke-width="2.5" stroke-linecap="round" opacity="0"/>
+      <path id="brow-r" d="M64 34 Q72 30 80 34" fill="none" stroke="#92400e" stroke-width="2.5" stroke-linecap="round" opacity="0"/>
+      <!-- Blush (shown at stage 0) -->
+      <ellipse id="blush-l" cx="28" cy="58" rx="9" ry="5" fill="#f87171" opacity=".25"/>
+      <ellipse id="blush-r" cx="82" cy="58" rx="9" ry="5" fill="#f87171" opacity=".25"/>
+      <!-- Teeth (hidden) -->
+      <g id="teeth" opacity="0">
+        <rect x="44" y="70" width="7" height="8" rx="2" fill="white"/>
+        <rect x="53" y="70" width="7" height="8" rx="2" fill="white"/>
+        <rect x="62" y="70" width="7" height="8" rx="2" fill="white"/>
+      </g>
+      <!-- Evil pupils -->
+      <circle id="pupil-l" cx="38" cy="44" r="3.5" fill="#1a0a00" opacity="0"/>
+      <circle id="pupil-r" cx="72" cy="44" r="3.5" fill="#1a0a00" opacity="0"/>
+    </svg>
+  </div>
+
+  <!-- Animals -->
+  <div id="animals">
+    <div class="a-card"><span class="a-emoji">🐰</span><div class="a-name">Thỏ kể chuyện</div><div class="a-genre">Cổ tích</div></div>
+    <div class="a-card"><span class="a-emoji">🦊</span><div class="a-name">Cáo thông thái</div><div class="a-genre">Phiêu lưu</div></div>
+    <div class="a-card"><span class="a-emoji">🐻</span><div class="a-name">Gấu ngủ đông</div><div class="a-genre">Giấc mơ</div></div>
+    <div class="a-card"><span class="a-emoji">🦉</span><div class="a-name">Cú mèo đêm</div><div class="a-genre">Huyền bí</div></div>
+  </div>
+
+  <!-- Dark Realm -->
+  <div id="dark-realm">
+    <div class="orb" style="width:180px;height:180px;background:rgba(120,0,200,.15);top:-50px;left:-50px;--d:9s;--mx:25px;--my:18px;"></div>
+    <div class="orb" style="width:140px;height:140px;background:rgba(180,0,255,.1);bottom:-30px;right:-30px;--d:12s;--mx:-18px;--my:-25px;"></div>
+    <div id="dr-stars"></div>
+    <div id="dr-moon">
+      <svg viewBox="0 0 72 72" width="72" height="72" style="position:absolute;inset:0;">
+        <ellipse cx="24" cy="28" rx="8" ry="9" fill="#1a0a00"/>
+        <ellipse cx="48" cy="28" rx="8" ry="9" fill="#1a0a00"/>
+        <ellipse cx="24" cy="29" rx="5" ry="6" fill="#dc2626"/>
+        <ellipse cx="48" cy="29" rx="5" ry="6" fill="#dc2626"/>
+        <circle cx="24" cy="29" r="2.2" fill="#fff" opacity=".85"/>
+        <circle cx="48" cy="29" r="2.2" fill="#fff" opacity=".85"/>
+        <path d="M18 52 Q24 45 30 52 Q36 60 42 52 Q48 45 54 52" fill="none" stroke="#1a0a00" stroke-width="3" stroke-linecap="round"/>
+        <line x1="23" y1="49" x2="21" y2="55" stroke="#1a0a00" stroke-width="2"/>
+        <line x1="30" y1="51" x2="29" y2="57" stroke="#1a0a00" stroke-width="2"/>
+        <line x1="36" y1="54" x2="36" y2="60" stroke="#1a0a00" stroke-width="2"/>
+        <line x1="42" y1="51" x2="43" y2="57" stroke="#1a0a00" stroke-width="2"/>
+        <line x1="49" y1="49" x2="51" y2="55" stroke="#1a0a00" stroke-width="2"/>
+      </svg>
+    </div>
+    <div id="dr-content">
+      <div id="dr-title">Không Gian Phía Sau Mặt Trăng</div>
+      <div id="dr-sub">☽ nơi những điều bị lãng quên cư trú ☽</div>
+      <div id="dr-narr"></div>
+      <div id="dr-fb"></div>
+      <div id="dr-ch"></div>
+      <div id="dr-inp"></div>
+    </div>
+    <button id="dr-escape" onclick="escapeRealm()">↩ trốn thoát</button>
+  </div>
+</div>
+
+<script>
+// ── Stars ──
+const starLayer = document.getElementById('star-layer');
+for(let i=0;i<55;i++){
+  const s=document.createElement('div'); s.className='star';
+  const sz=1+Math.random()*2.5;
+  s.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*85}%;width:${sz}px;height:${sz}px;position:absolute;--d:${1.5+Math.random()*3}s;animation-delay:${Math.random()*4}s;`;
+  starLayer.appendChild(s);
+}
+const drStars=document.getElementById('dr-stars');
+const drColors=['#c4b5fd','#f0abfc','#818cf8','#a78bfa','#e879f9'];
+for(let i=0;i<65;i++){
+  const s=document.createElement('div'); s.className='dr-star';
+  const sz=1+Math.random()*3;
+  s.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*100}%;width:${sz}px;height:${sz}px;background:${drColors[i%5]};position:absolute;--d:${1.5+Math.random()*4}s;animation-delay:${Math.random()*5}s;`;
+  drStars.appendChild(s);
+}
+
+// ── Moon states ──
+// 0: calm  1: curious  2: suspicious  3: shocked  4: evil
+let moonStage = 0;
+let evilDone = false;
+
+// face elements
+const eyeL   = document.getElementById('eye-l');
+const eyeR   = document.getElementById('eye-r');
+const eyeLG  = document.getElementById('eye-l-g');
+const eyeRG  = document.getElementById('eye-r-g');
+const mouth  = document.getElementById('mouth');
+const browL  = document.getElementById('brow-l');
+const browR  = document.getElementById('brow-r');
+const blushL = document.getElementById('blush-l');
+const blushR = document.getElementById('blush-r');
+const teeth  = document.getElementById('teeth');
+const pupilL = document.getElementById('pupil-l');
+const pupilR = document.getElementById('pupil-r');
+const moonBody = document.getElementById('moon-body');
+
+const stages = [
+  // 0 - calm smile
+  ()=>{
+    eyeL.setAttribute('ry','7'); eyeR.setAttribute('ry','7');
+    eyeL.setAttribute('cy','44'); eyeR.setAttribute('cy','44');
+    eyeL.setAttribute('fill','#92400e'); eyeR.setAttribute('fill','#92400e');
+    mouth.setAttribute('d','M38 68 Q55 80 72 68');
+    mouth.setAttribute('stroke','#92400e');
+    browL.setAttribute('opacity','0'); browR.setAttribute('opacity','0');
+    blushL.setAttribute('opacity','.25'); blushR.setAttribute('opacity','.25');
+    teeth.setAttribute('opacity','0');
+    pupilL.setAttribute('opacity','0'); pupilR.setAttribute('opacity','0');
+    moonBody.style.background='radial-gradient(circle at 36% 32%, #fffbeb, #fef3c7 38%, #fde68a 70%, #f59e0b 100%)';
+  },
+  // 1 - curious (tilt brows, open eyes)
+  ()=>{
+    eyeL.setAttribute('ry','8'); eyeR.setAttribute('ry','8');
+    eyeL.setAttribute('cy','43'); eyeR.setAttribute('cy','43');
+    eyeL.setAttribute('fill','#78350f'); eyeR.setAttribute('fill','#78350f');
+    mouth.setAttribute('d','M42 67 Q55 73 68 67');
+    browL.setAttribute('d','M30 32 Q38 27 46 32');
+    browR.setAttribute('d','M64 32 Q72 27 80 32');
+    browL.setAttribute('opacity','1'); browR.setAttribute('opacity','1');
+    blushL.setAttribute('opacity','.12'); blushR.setAttribute('opacity','.12');
+    teeth.setAttribute('opacity','0');
+    pupilL.setAttribute('opacity','0'); pupilR.setAttribute('opacity','0');
+    moonBody.style.background='radial-gradient(circle at 36% 32%, #fffbeb, #fef3c7 38%, #fde68a 70%, #f59e0b 100%)';
+  },
+  // 2 - suspicious (one brow up, smirk)
+  ()=>{
+    eyeL.setAttribute('ry','5'); eyeR.setAttribute('ry','8');
+    eyeL.setAttribute('cy','44'); eyeR.setAttribute('cy','42');
+    eyeL.setAttribute('fill','#78350f'); eyeR.setAttribute('fill','#78350f');
+    mouth.setAttribute('d','M40 68 Q52 72 65 65');
+    browL.setAttribute('d','M30 36 Q38 34 46 36');
+    browR.setAttribute('d','M64 30 Q72 25 80 30');
+    browL.setAttribute('opacity','1'); browR.setAttribute('opacity','1');
+    blushL.setAttribute('opacity','0'); blushR.setAttribute('opacity','0');
+    teeth.setAttribute('opacity','0');
+    pupilL.setAttribute('opacity','.6'); pupilR.setAttribute('opacity','.6');
+    pupilL.setAttribute('cx','38'); pupilR.setAttribute('cx','72');
+    pupilL.setAttribute('cy','44'); pupilR.setAttribute('cy','42');
+    moonBody.style.background='radial-gradient(circle at 36% 32%, #fef9c3, #fde68a 45%, #ca8a04 80%, #a16207 100%)';
+  },
+  // 3 - shocked (wide eyes, open mouth)
+  ()=>{
+    eyeL.setAttribute('ry','10'); eyeR.setAttribute('ry','10');
+    eyeL.setAttribute('cy','43'); eyeR.setAttribute('cy','43');
+    eyeL.setAttribute('fill','#7f1d1d'); eyeR.setAttribute('fill','#7f1d1d');
+    mouth.setAttribute('d','M42 65 Q55 82 68 65');
+    browL.setAttribute('d','M28 30 Q38 24 46 30');
+    browR.setAttribute('d','M64 30 Q72 24 82 30');
+    browL.setAttribute('opacity','1'); browR.setAttribute('opacity','1');
+    blushL.setAttribute('opacity','0'); blushR.setAttribute('opacity','0');
+    teeth.setAttribute('opacity','1');
+    pupilL.setAttribute('opacity','.8'); pupilR.setAttribute('opacity','.8');
+    pupilL.setAttribute('cx','37'); pupilR.setAttribute('cx','73');
+    pupilL.setAttribute('cy','43'); pupilR.setAttribute('cy','43');
+    pupilL.setAttribute('r','4'); pupilR.setAttribute('r','4');
+    moonBody.style.background='radial-gradient(circle at 36% 32%, #fefce8, #fde68a 40%, #b45309 80%, #78350f 100%)';
+    // shake
+    shake(document.getElementById('moon-wrap'));
+  },
+  // 4 - full evil
+  ()=>{
+    eyeL.setAttribute('ry','9'); eyeR.setAttribute('ry','9');
+    eyeL.setAttribute('cy','44'); eyeR.setAttribute('cy','44');
+    eyeL.setAttribute('fill','#dc2626'); eyeR.setAttribute('fill','#dc2626');
+    mouth.setAttribute('d','M32 62 Q38 54 44 62 Q55 74 66 62 Q72 54 78 62');
+    mouth.setAttribute('stroke','#7f1d1d');
+    browL.setAttribute('d','M28 33 Q38 26 46 33');
+    browR.setAttribute('d','M64 33 Q72 26 82 33');
+    browL.setAttribute('opacity','1'); browR.setAttribute('opacity','1');
+    blushL.setAttribute('opacity','0'); blushR.setAttribute('opacity','0');
+    teeth.setAttribute('opacity','0');
+    pupilL.setAttribute('opacity','1'); pupilR.setAttribute('opacity','1');
+    pupilL.setAttribute('cx','38'); pupilR.setAttribute('cx','72');
+    pupilL.setAttribute('cy','44'); pupilR.setAttribute('cy','44');
+    pupilL.setAttribute('r','4.5'); pupilR.setAttribute('r','4.5');
+    moonBody.style.background='radial-gradient(circle at 36% 32%, #fef9c3, #fbbf24 40%, #92400e 75%, #451a03 100%)';
+    moonBody.style.boxShadow='0 0 50px rgba(220,38,38,.6), 0 0 100px rgba(220,38,38,.3)';
+  }
+];
+
+function applyStage(n){
+  stages[n]();
+}
+
+function shake(el){
+  let i=0;
+  const t=setInterval(()=>{
+    el.style.transform=`translateX(-50%) rotate(${i%2?'5':'-5'}deg) scale(1.1)`;
+    if(++i>9){clearInterval(t); el.style.transform='translateX(-50%)';}
+  },55);
+}
+
+function spawnParticles(){
+  const wrap=document.getElementById('moon-wrap');
+  const colors=['#a855f7','#f0abfc','#fbbf24','#86efac','#93c5fd','#f9a8d4'];
+  for(let i=0;i<14;i++){
+    const p=document.createElement('div'); p.className='particle';
+    const angle=Math.random()*Math.PI*2;
+    const dist=60+Math.random()*80;
+    const col=colors[Math.floor(Math.random()*colors.length)];
+    const sz=3+Math.random()*6;
+    p.style.cssText=`
+      position:absolute;left:${55+Math.cos(angle)*dist}px;top:${55+Math.sin(angle)*dist}px;
+      width:${sz}px;height:${sz}px;background:${col};border-radius:50%;
+      box-shadow:0 0 ${sz*2}px ${col};pointer-events:none;
+      animation:floatUp ${.5+Math.random()*.6}s ease-out forwards;
+      --d:1s;z-index:20;
+    `;
+    document.getElementById('app').appendChild(p);
+    setTimeout(()=>p.remove(),1200);
+  }
+}
+
+function moonClick(){
+  if(evilDone) return;
+  moonStage = Math.min(moonStage+1, 4);
+  applyStage(moonStage);
+  spawnParticles();
+
+  if(moonStage===4){
+    evilDone=true;
+    setTimeout(triggerEvil, 700);
+  }
+}
+
+function triggerEvil(){
+  const fl=document.getElementById('flash');
+  fl.style.transition='opacity .08s'; fl.style.opacity='1';
+  setTimeout(()=>{
+    fl.style.transition='opacity .5s'; fl.style.opacity='0';
+    // grow moon into darkness
+    const mw=document.getElementById('moon-wrap');
+    mw.style.transition='all .7s cubic-bezier(.4,0,.2,1)';
+    mw.style.width='400px'; mw.style.height='400px';
+    mw.style.top='50%'; mw.style.transform='translate(-50%,-50%)';
+    mw.style.zIndex='150';
+    setTimeout(()=>{
+      document.getElementById('dark-realm').classList.add('show');
+      mw.style.opacity='0';
+      setTimeout(()=>{ mw.style.display='none'; drStart(); },600);
+    },600);
+  },120);
+}
+
+// ── Dark Realm ──
+let drDone=[false,false,false];
+
+const drScenes=[
+  {
+    lines:[
+      {t:'Mặt trăng nở nụ cười.'},
+      {t:'Và bạn rơi — không phải xuống, mà vào trong.'},
+      {t:'"Chào mừng đến nơi những điều bị lãng quên sinh sống."',h:1},
+      {t:'"Bạn không được mời. Nhưng bạn đã đến."',h:1},
+      {t:'"Trả lời ba câu hỏi — ta sẽ thả người."',h:1},
+    ],
+    choices:[{l:'Tôi đồng ý.',next:1}]
+  },
+  {
+    lines:[
+      {t:'Câu hỏi thứ nhất.'},
+      {t:'"Thứ nào sau đây không bao giờ có thể lấy lại?"',h:1},
+    ],
+    choices:[
+      {l:'Tiền bạc',msg:'Mặt trăng lắc đầu. "Tiền mất có thể kiếm lại." Thử lại.'},
+      {l:'Sức khỏe',msg:'Mặt trăng nhếch miệng. "Đôi khi sức khỏe hồi phục được." Thử lại.'},
+      {l:'Thời gian',ok:1,msg:'Mặt trăng im lặng rất lâu.\n"Đúng. Mỗi giây trôi qua — không bao giờ quay lại. Đó là thứ ta thật sự đánh cắp của người."',next:2},
+      {l:'Niềm tin',msg:'Mặt trăng lắc đầu. "Niềm tin đôi khi được xây dựng lại." Thử lại.'},
+    ]
+  },
+  {
+    lines:[
+      {t:'Câu hỏi thứ hai.'},
+      {t:'"Thỏ, Cáo, Gấu, Cú — ai đang nói dối chính mình?"',h:1},
+    ],
+    choices:[
+      {l:'Thỏ — nói mình chạy vì tự do',msg:'Gần đúng... nhưng Thỏ biết mình đang trốn chạy.'},
+      {l:'Cáo — dùng trí tuệ thay vì cho phép mình dễ bị tổn thương',ok:1,msg:'Mặt trăng gật đầu chậm.\n"Đúng. Thông minh dễ hơn là dũng cảm đủ để yêu và được yêu."',next:3},
+      {l:'Gấu — nói mình ngủ vì cần nghỉ',msg:'Gấu biết mình không ngủ vì mệt. Nhưng đó không phải lời dối với bản thân.'},
+      {l:'Cú — nói mình một mình vì muốn vậy',msg:'Cú cô đơn và biết rõ điều đó.'},
+    ]
+  },
+  {
+    lines:[
+      {t:'Câu hỏi cuối.'},
+      {t:'"Tại sao bạn chạm vào mặt trăng?"',h:1},
+      {t:'Mặt trăng nhìn thẳng vào mắt bạn.'},
+      {t:'"Hãy nói thật."',h:1},
+    ],
+    type:'input'
+  }
+];
+
+function drStart(){
+  setTimeout(()=>drRender(0),500);
+}
+
+function drRender(idx){
+  const sc=drScenes[idx]; if(!sc) return;
+  const narr=document.getElementById('dr-narr'); narr.innerHTML='';
+  sc.lines.forEach((l,i)=>{
+    const s=document.createElement('span');
+    s.className='dr-l'+(l.h?' h':'');
+    s.textContent=l.t; narr.appendChild(s);
+    setTimeout(()=>s.classList.add('v'),180+i*300);
+  });
+  const ch=document.getElementById('dr-ch'); ch.innerHTML='';
+  document.getElementById('dr-fb').className=''; document.getElementById('dr-fb').innerHTML='';
+  document.getElementById('dr-inp').style.display='none'; document.getElementById('dr-inp').innerHTML='';
+  drDone[idx]=false;
+  const delay=sc.lines.length*300+400;
+
+  if(sc.type==='input'){
+    setTimeout(()=>{
+      const ip=document.getElementById('dr-inp'); ip.style.display='block';
+      ip.innerHTML=`<textarea id="dr-txt" placeholder="Nói thật với mặt trăng..."></textarea>
+      <button class="dr-sub" onclick="drSubmit()">Trả lời ✦</button>`;
+    },delay);
+  } else if(sc.choices){
+    setTimeout(()=>{
+      sc.choices.forEach((c,i)=>{
+        const b=document.createElement('button'); b.className='dr-btn'; b.textContent=c.l;
+        b.onclick=()=>drChoice(idx,i,c); ch.appendChild(b);
+      });
+    },delay);
+  }
+}
+
+function drChoice(scIdx,btnIdx,c){
+  if(drDone[scIdx]) return;
+  const btns=document.querySelectorAll('.dr-btn');
+  const fb=document.getElementById('dr-fb');
+  if(c.ok){
+    drDone[scIdx]=true;
+    btns.forEach((b,i)=>{b.disabled=true; if(i===btnIdx)b.classList.add('ok');});
+    fb.innerHTML=`<strong style="color:#4ade80">✓</strong> ${c.msg.replace(/\n/g,'<br><br>')}`;
+    fb.className='s';
+    if(c.next!==undefined) setTimeout(()=>drRender(c.next),2400);
+  } else {
+    btns.forEach((b,i)=>{b.disabled=true; if(i===btnIdx)b.classList.add('no');});
+    fb.innerHTML=`<span style="color:#fca5a5">${c.msg||'Sai rồi.'}</span>`;
+    fb.className='s';
+    setTimeout(()=>{
+      btns.forEach(b=>{b.disabled=false; b.classList.remove('ok','no');});
+      drDone[scIdx]=false; fb.className=''; fb.innerHTML='';
+    },2200);
+  }
+}
+
+function drSubmit(){
+  const v=document.getElementById('dr-txt').value.trim(); if(!v) return;
+  document.getElementById('dr-inp').innerHTML=`<div style="text-align:center;padding:10px 0;">
+    <em style="color:#ddd6fe;font-size:14px;font-family:Georgia,serif;">"${v}"</em>
+  </div>`;
+  const fb=document.getElementById('dr-fb');
+  fb.innerHTML=`Mặt trăng nhìn câu trả lời của bạn rất lâu.<br><br>
+<em style="color:#f0abfc">"Tất cả những ai chạm vào ta đều nghĩ mình chỉ tò mò."</em><br><br>
+<span style="color:#ddd6fe">"Nhưng thật ra — họ đang tìm kiếm điều gì đó mà ánh sáng ban ngày không thể cho."</span><br><br>
+<em style="color:#c4b5fd">"Ta sẽ nhớ câu trả lời này."</em>`;
+  fb.className='s';
+  setTimeout(()=>{
+    document.getElementById('dr-ch').innerHTML=`
+      <div style="background:rgba(120,0,180,.15);border:1px solid rgba(168,85,247,.4);border-radius:14px;padding:20px;text-align:center;margin-top:10px;">
+        <div style="font-size:12px;color:#f0abfc;letter-spacing:2px;margin-bottom:10px;font-family:sans-serif;">🌑 BÍ MẬT CUỐI CÙNG 🌑</div>
+        <p style="color:#ddd6fe;font-size:13px;line-height:1.85;font-family:sans-serif;">
+          Thỏ, Cáo, Gấu, Cú — họ không phải bốn nhân vật khác nhau.<br>
+          <strong style="color:#f0abfc">Họ là bốn phần của cùng một người.</strong><br><br>
+          Người chạy trốn. Người che giấu. Người ngủ quên. Người giữ im lặng.<br>
+          <em style="color:#c4b5fd">Và mặt trăng biết tất cả.</em>
+        </p>
+        <button class="dr-btn" style="margin-top:16px;text-align:center;border-color:rgba(168,85,247,.5);" onclick="escapeRealm()">Rời khỏi không gian này ↩</button>
+      </div>`;
+  },3200);
+}
+
+function escapeRealm(){
+  const dr=document.getElementById('dark-realm');
+  const fl=document.getElementById('flash');
+  fl.style.transition='opacity .1s'; fl.style.opacity='1';
+  setTimeout(()=>{
+    dr.style.opacity='0';
+    fl.style.transition='opacity .5s'; fl.style.opacity='0';
+    setTimeout(()=>{
+      dr.classList.remove('show'); dr.style.opacity='';
+      // reset moon
+      evilDone=false; moonStage=0;
+      const mw=document.getElementById('moon-wrap');
+      mw.style.cssText='position:absolute;top:120px;left:50%;transform:translateX(-50%);width:110px;height:110px;cursor:pointer;z-index:10;';
+      mw.style.display=''; mw.style.opacity='1';
+      moonBody.style.background='radial-gradient(circle at 36% 32%, #fffbeb, #fef3c7 38%, #fde68a 70%, #f59e0b 100%)';
+      moonBody.style.boxShadow='0 0 28px rgba(253,230,138,.3),0 0 55px rgba(251,191,36,.15)';
+      applyStage(0);
+      document.getElementById('moon-face').style.opacity='0';
+    },900);
+  },150);
+}
+
+// init face at stage 0 (hidden until hover)
+applyStage(0);
+</script>
+</body>
+</html>
