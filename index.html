@@ -2,7 +2,11 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="description" content="Thế Giới Thần Tiên - Khám phá rừng cổ tích đầy màu sắc với các nhân vật thú vị!">
+  <meta name="theme-color" content="#0a0520">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>Thế Giới Thần Tiên</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -21,6 +25,12 @@
       background: linear-gradient(180deg, #0a0520 0%, #1a0a3e 40%, #2d1b69 70%, #1a3a2a 100%);
       cursor: default;
       font-family: 'Georgia', serif;
+      animation: worldPulse 8s ease-in-out infinite;
+      will-change: filter;
+    }
+    @keyframes worldPulse {
+      0%, 100% { filter: brightness(1); }
+      50% { filter: brightness(1.05); }
     }
 
     /* MOON STYLES */
@@ -30,6 +40,12 @@
       width:110px;height:110px;
       cursor:pointer;
       z-index:35;
+      animation: moonFloat 5s ease-in-out infinite;
+      will-change: transform;
+    }
+    @keyframes moonFloat {
+      0%, 100% { transform: translate(-50%, 0); }
+      50% { transform: translate(-50%, -8px); }
     }
     #moon-glow {
       position:absolute;inset:-18px;
@@ -125,11 +141,12 @@
       position: absolute;
       border-radius: 50%;
       background: white;
+      box-shadow: 0 0 8px white;
       animation: twinkle var(--dur, 2s) ease-in-out infinite;
     }
     @keyframes twinkle {
-      0%, 100% { opacity: 0.3; transform: scale(1); }
-      50% { opacity: 1; transform: scale(1.3); }
+      0%, 100% { opacity: 0.2; transform: scale(1); box-shadow: 0 0 4px white; }
+      50% { opacity: 1; transform: scale(1.8); box-shadow: 0 0 16px white; }
     }
 
     /* Door */
@@ -143,6 +160,12 @@
       align-items: center;
       z-index: 10;
       transition: opacity 0.5s;
+      animation: doorFloat 4.5s ease-in-out infinite;
+      will-change: transform, opacity;
+    }
+    @keyframes doorFloat {
+      0%, 100% { transform: translate(-50%, -50%); }
+      50% { transform: translate(-50%, -54%); }
     }
 
     #door-svg {
@@ -172,11 +195,22 @@
       position: absolute;
       border-radius: 50%;
       pointer-events: none;
-      animation: flyOut var(--dur) ease-out forwards;
+      animation: floatUp var(--dur) ease-out forwards;
     }
-    @keyframes flyOut {
-      0% { opacity: 1; transform: translate(0,0) scale(1); }
-      100% { opacity: 0; transform: translate(var(--tx), var(--ty)) scale(0); }
+    @keyframes floatUp {
+      0% { 
+        opacity: 1; 
+        transform: translate(0, 0) scale(1);
+        filter: brightness(1.2);
+      }
+      50% {
+        opacity: 1;
+        transform: translate(calc(var(--tx) * 0.5), calc(var(--ty) * 0.5)) scale(1.3);
+      }
+      100% { 
+        opacity: 0; 
+        transform: translate(var(--tx), var(--ty)) scale(0.5);
+      }
     }
 
     /* Forest scene */
@@ -258,11 +292,26 @@
       border-color: rgba(255,255,255,0.5);
       box-shadow: 0 8px 30px rgba(167,139,250,0.4);
     }
-    .animal-emoji {
-      font-size: 32px;
+    .animal-image {
+      width: 80px;
+      height: 80px;
       display: block;
-      margin-bottom: 6px;
-      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+      margin: 0 auto 8px;
+      object-fit: contain;
+      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
+      transition: transform 0.3s ease;
+      animation: animalFloat 3.5s ease-in-out infinite;
+    }
+    .animal-card:nth-child(1) .animal-image { animation-delay: 0s; }
+    .animal-card:nth-child(2) .animal-image { animation-delay: 0.3s; }
+    .animal-card:nth-child(3) .animal-image { animation-delay: 0.6s; }
+    .animal-card:nth-child(4) .animal-image { animation-delay: 0.9s; }
+    @keyframes animalFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+    .animal-card:hover .animal-image {
+      transform: translateY(-8px) scale(1.1) rotate(-5deg);
     }
     .animal-name {
       color: #f0e6ff;
@@ -517,22 +566,22 @@
   <!-- Animals -->
   <div id="animals">
     <a href="rabbit_story_game.html" class="animal-card">
-      <span class="animal-emoji">🐰</span>
+      <img class="animal-image" src="images/rabbit.png" alt="Thỏ" loading="lazy">
       <div class="animal-name">Thỏ kể chuyện</div>
       <div class="animal-genre">Cổ tích</div>
     </a>
     <a href="fox_story_fixed.html" class="animal-card">
-      <span class="animal-emoji">🦊</span>
+      <img class="animal-image" src="images/fox.png" alt="Cáo" loading="lazy">
       <div class="animal-name">Cáo thông thái</div>
       <div class="animal-genre">Phiêu lưu</div>
     </a>
     <a href="bear_story_game.html" class="animal-card">
-      <span class="animal-emoji">🐻</span>
+      <img class="animal-image" src="images/bear.png" alt="Gấu" loading="lazy">
       <div class="animal-name">Gấu ngủ đông</div>
       <div class="animal-genre">Giấc mơ</div>
     </a>
     <a href="owl_story_game.html" class="animal-card">
-      <span class="animal-emoji">🦉</span>
+      <img class="animal-image" src="images/owl.png" alt="Cú" loading="lazy">
       <div class="animal-name">Cú mèo đêm</div>
       <div class="animal-genre">Huyền bí</div>
     </a>
@@ -541,35 +590,46 @@
 </div>
 
 <script>
-function openDoor() {
-  const doorWrap = document.getElementById('door-wrap');
-  const forest = document.getElementById('forest');
-  const welcome = document.getElementById('welcome');
-  const animals = document.getElementById('animals');
-  const world = document.getElementById('world');
+// Cache DOM elements for performance
+let elCache = {};
+let starsCreated = false;
+let firefliesCreated = false;
+let drStarsCreated = false;
 
-  // Spawn particles
-  for (let i = 0; i < 60; i++) {
+function getEl(id) {
+  if (!elCache[id]) elCache[id] = document.getElementById(id);
+  return elCache[id];
+}
+
+function openDoor() {
+  const doorWrap = getEl('door-wrap');
+  const forest = getEl('forest');
+  const welcome = getEl('welcome');
+  const animals = getEl('animals');
+  const world = getEl('world');
+
+  // Spawn warm glowing particles (float up gently)
+  for (let i = 0; i < 35; i++) {
     const p = document.createElement('div');
     p.className = 'particle';
-    const angle = (Math.random() * 360) * Math.PI / 180;
-    const dist = 80 + Math.random() * 200;
-    const tx = Math.cos(angle) * dist;
-    const ty = Math.sin(angle) * dist;
-    const size = 3 + Math.random() * 6;
-    const colors = ['#a78bfa', '#f472b6', '#fbbf24', '#34d399'];
+    const size = 2 + Math.random() * 5;
+    const colors = ['#fef3c7', '#fde68a', '#fbbf24', '#f59e0b', '#fcd34d'];
     const color = colors[Math.floor(Math.random() * colors.length)];
-    const dur = 0.6 + Math.random() * 1.2;
+    const tx = (Math.random() - 0.5) * 150;
+    const ty = -100 - Math.random() * 200;
+    const dur = 1.2 + Math.random() * 1.5;
     p.style.left = '50%';
     p.style.top = '50%';
     p.style.width = `${size}px`;
     p.style.height = `${size}px`;
+    p.style.borderRadius = '50%';
     p.style.background = color;
+    p.style.boxShadow = `0 0 ${size*2}px ${color}`;
     p.style.setProperty('--tx', `${tx}px`);
     p.style.setProperty('--ty', `${ty}px`);
     p.style.setProperty('--dur', `${dur}s`);
     world.appendChild(p);
-    setTimeout(() => p.remove(), 2000);
+    setTimeout(() => p.remove(), 2500);
   }
 
   // Hide door and show forest
@@ -580,49 +640,60 @@ function openDoor() {
     welcome.classList.add('show');
     animals.classList.add('show');
 
-    // Init dark realm stars
-    const drStars = document.getElementById('dr-stars');
-    const drColors = ['#c4b5fd','#f0abfc','#818cf8','#a78bfa','#e879f9'];
-    for(let i = 0; i < 65; i++) {
-      const s = document.createElement('div');
-      s.className = 'dr-star';
-      const sz = 1 + Math.random() * 3;
-      s.style.left = `${Math.random() * 100}%`;
-      s.style.top = `${Math.random() * 100}%`;
-      s.style.width = `${sz}px`;
-      s.style.height = `${sz}px`;
-      s.style.background = drColors[i % 5];
-      s.style.setProperty('--d', `${1.5 + Math.random() * 4}s`);
-      s.style.animationDelay = `${Math.random() * 5}s`;
-      drStars.appendChild(s);
+    // Init dark realm stars (only once!)
+    if (!drStarsCreated) {
+      const drStars = getEl('dr-stars');
+      const drColors = ['#c4b5fd','#f0abfc','#818cf8','#a78bfa','#e879f9'];
+      for(let i = 0; i < 65; i++) {
+        const s = document.createElement('div');
+        s.className = 'dr-star';
+        const sz = 1 + Math.random() * 3;
+        s.style.left = `${Math.random() * 100}%`;
+        s.style.top = `${Math.random() * 100}%`;
+        s.style.width = `${sz}px`;
+        s.style.height = `${sz}px`;
+        s.style.background = drColors[i % 5];
+        s.style.setProperty('--d', `${1.5 + Math.random() * 4}s`);
+        s.style.animationDelay = `${Math.random() * 5}s`;
+        drStars.appendChild(s);
+      }
+      drStarsCreated = true;
     }
   }, 400);
 }
 
-// Create stars
-for (let i = 0; i < 80; i++) {
-  const star = document.createElement('div');
-  star.className = 'star';
-  star.style.left = `${Math.random() * 100}%`;
-  star.style.top = `${Math.random() * 60}%`;
-  star.style.width = `${1 + Math.random() * 2}px`;
-  star.style.height = star.style.width;
-  star.style.setProperty('--dur', `${1 + Math.random() * 3}s`);
-  star.style.animationDelay = `${Math.random() * 2}s`;
-  document.getElementById('world').appendChild(star);
+// Create stars (only once!)
+if (!starsCreated) {
+  const world = getEl('world');
+  for (let i = 0; i < 80; i++) {
+    const star = document.createElement('div');
+    star.className = 'star';
+    star.style.left = `${Math.random() * 100}%`;
+    star.style.top = `${Math.random() * 60}%`;
+    star.style.width = `${1 + Math.random() * 2}px`;
+    star.style.height = star.style.width;
+    star.style.setProperty('--dur', `${1 + Math.random() * 3}s`);
+    star.style.animationDelay = `${Math.random() * 2}s`;
+    world.appendChild(star);
+  }
+  starsCreated = true;
 }
 
-// Create fireflies
-for (let i = 0; i < 15; i++) {
-  const firefly = document.createElement('div');
-  firefly.className = 'firefly';
-  firefly.style.left = `${10 + Math.random() * 80}%`;
-  firefly.style.top = `${20 + Math.random() * 70}%`;
-  firefly.style.setProperty('--d', `${3 + Math.random() * 4}s`);
-  firefly.style.setProperty('--mx', `${-30 + Math.random() * 60}px`);
-  firefly.style.setProperty('--my', `${-20 + Math.random() * 40}px`);
-  firefly.style.animationDelay = `${Math.random() * 3}s`;
-  document.getElementById('forest').appendChild(firefly);
+// Create fireflies (only once!)
+if (!firefliesCreated) {
+  const forest = getEl('forest');
+  for (let i = 0; i < 15; i++) {
+    const firefly = document.createElement('div');
+    firefly.className = 'firefly';
+    firefly.style.left = `${10 + Math.random() * 80}%`;
+    firefly.style.top = `${20 + Math.random() * 70}%`;
+    firefly.style.setProperty('--d', `${3 + Math.random() * 4}s`);
+    firefly.style.setProperty('--mx', `${-30 + Math.random() * 60}px`);
+    firefly.style.setProperty('--my', `${-20 + Math.random() * 40}px`);
+    firefly.style.animationDelay = `${Math.random() * 3}s`;
+    forest.appendChild(firefly);
+  }
+  firefliesCreated = true;
 }
 
 // ====================
@@ -631,98 +702,101 @@ for (let i = 0; i < 15; i++) {
 let moonStage = 0;
 let evilDone = false;
 
-const eyeL = document.getElementById('eye-l');
-const eyeR = document.getElementById('eye-r');
-const mouth = document.getElementById('mouth');
-const browL = document.getElementById('brow-l');
-const browR = document.getElementById('brow-r');
-const blushL = document.getElementById('blush-l');
-const blushR = document.getElementById('blush-r');
-const teeth = document.getElementById('teeth');
-const pupilL = document.getElementById('pupil-l');
-const pupilR = document.getElementById('pupil-r');
-const moonBody = document.getElementById('moon-body');
+// Cache moon elements
+const moonEls = {
+  eyeL: () => getEl('eye-l'),
+  eyeR: () => getEl('eye-r'),
+  mouth: () => getEl('mouth'),
+  browL: () => getEl('brow-l'),
+  browR: () => getEl('brow-r'),
+  blushL: () => getEl('blush-l'),
+  blushR: () => getEl('blush-r'),
+  teeth: () => getEl('teeth'),
+  pupilL: () => getEl('pupil-l'),
+  pupilR: () => getEl('pupil-r'),
+  moonBody: () => getEl('moon-body'),
+};
 
 const stages = [
   // 0 - calm smile
   () => {
-    eyeL.setAttribute('ry','7'); eyeR.setAttribute('ry','7');
-    eyeL.setAttribute('cy','44'); eyeR.setAttribute('cy','44');
-    eyeL.setAttribute('fill','#92400e'); eyeR.setAttribute('fill','#92400e');
-    mouth.setAttribute('d','M38 68 Q55 80 72 68');
-    mouth.setAttribute('stroke','#92400e');
-    browL.setAttribute('opacity','0'); browR.setAttribute('opacity','0');
-    blushL.setAttribute('opacity','.25'); blushR.setAttribute('opacity','.25');
-    teeth.setAttribute('opacity','0');
-    pupilL.setAttribute('opacity','0'); pupilR.setAttribute('opacity','0');
-    moonBody.style.background='radial-gradient(circle at 36% 32%, #fffbeb, #fef3c7 38%, #fde68a 70%, #f59e0b 100%)';
+    moonEls.eyeL().setAttribute('ry','7'); moonEls.eyeR().setAttribute('ry','7');
+    moonEls.eyeL().setAttribute('cy','44'); moonEls.eyeR().setAttribute('cy','44');
+    moonEls.eyeL().setAttribute('fill','#92400e'); moonEls.eyeR().setAttribute('fill','#92400e');
+    moonEls.mouth().setAttribute('d','M38 68 Q55 80 72 68');
+    moonEls.mouth().setAttribute('stroke','#92400e');
+    moonEls.browL().setAttribute('opacity','0'); moonEls.browR().setAttribute('opacity','0');
+    moonEls.blushL().setAttribute('opacity','.25'); moonEls.blushR().setAttribute('opacity','.25');
+    moonEls.teeth().setAttribute('opacity','0');
+    moonEls.pupilL().setAttribute('opacity','0'); moonEls.pupilR().setAttribute('opacity','0');
+    moonEls.moonBody().style.background='radial-gradient(circle at 36% 32%, #fffbeb, #fef3c7 38%, #fde68a 70%, #f59e0b 100%)';
   },
   // 1 - curious
   () => {
-    eyeL.setAttribute('ry','8'); eyeR.setAttribute('ry','8');
-    eyeL.setAttribute('cy','43'); eyeR.setAttribute('cy','43');
-    eyeL.setAttribute('fill','#78350f'); eyeR.setAttribute('fill','#78350f');
-    mouth.setAttribute('d','M42 67 Q55 73 68 67');
-    browL.setAttribute('d','M30 32 Q38 27 46 32');
-    browR.setAttribute('d','M64 32 Q72 27 80 32');
-    browL.setAttribute('opacity','1'); browR.setAttribute('opacity','1');
-    blushL.setAttribute('opacity','.12'); blushR.setAttribute('opacity','.12');
-    teeth.setAttribute('opacity','0');
-    pupilL.setAttribute('opacity','0'); pupilR.setAttribute('opacity','0');
-    moonBody.style.background='radial-gradient(circle at 36% 32%, #fffbeb, #fef3c7 38%, #fde68a 70%, #f59e0b 100%)';
+    moonEls.eyeL().setAttribute('ry','8'); moonEls.eyeR().setAttribute('ry','8');
+    moonEls.eyeL().setAttribute('cy','43'); moonEls.eyeR().setAttribute('cy','43');
+    moonEls.eyeL().setAttribute('fill','#78350f'); moonEls.eyeR().setAttribute('fill','#78350f');
+    moonEls.mouth().setAttribute('d','M42 67 Q55 73 68 67');
+    moonEls.browL().setAttribute('d','M30 32 Q38 27 46 32');
+    moonEls.browR().setAttribute('d','M64 32 Q72 27 80 32');
+    moonEls.browL().setAttribute('opacity','1'); moonEls.browR().setAttribute('opacity','1');
+    moonEls.blushL().setAttribute('opacity','.12'); moonEls.blushR().setAttribute('opacity','.12');
+    moonEls.teeth().setAttribute('opacity','0');
+    moonEls.pupilL().setAttribute('opacity','0'); moonEls.pupilR().setAttribute('opacity','0');
+    moonEls.moonBody().style.background='radial-gradient(circle at 36% 32%, #fffbeb, #fef3c7 38%, #fde68a 70%, #f59e0b 100%)';
   },
   // 2 - suspicious
   () => {
-    eyeL.setAttribute('ry','5'); eyeR.setAttribute('ry','8');
-    eyeL.setAttribute('cy','44'); eyeR.setAttribute('cy','42');
-    eyeL.setAttribute('fill','#78350f'); eyeR.setAttribute('fill','#78350f');
-    mouth.setAttribute('d','M40 68 Q52 72 65 65');
-    browL.setAttribute('d','M30 36 Q38 34 46 36');
-    browR.setAttribute('d','M64 30 Q72 25 80 30');
-    browL.setAttribute('opacity','1'); browR.setAttribute('opacity','1');
-    blushL.setAttribute('opacity','0'); blushR.setAttribute('opacity','0');
-    teeth.setAttribute('opacity','0');
-    pupilL.setAttribute('opacity','.6'); pupilR.setAttribute('opacity','.6');
-    pupilL.setAttribute('cx','38'); pupilR.setAttribute('cx','72');
-    pupilL.setAttribute('cy','44'); pupilR.setAttribute('cy','42');
-    moonBody.style.background='radial-gradient(circle at 36% 32%, #fef9c3, #fde68a 45%, #ca8a04 80%, #a16207 100%)';
+    moonEls.eyeL().setAttribute('ry','5'); moonEls.eyeR().setAttribute('ry','8');
+    moonEls.eyeL().setAttribute('cy','44'); moonEls.eyeR().setAttribute('cy','42');
+    moonEls.eyeL().setAttribute('fill','#78350f'); moonEls.eyeR().setAttribute('fill','#78350f');
+    moonEls.mouth().setAttribute('d','M40 68 Q52 72 65 65');
+    moonEls.browL().setAttribute('d','M30 36 Q38 34 46 36');
+    moonEls.browR().setAttribute('d','M64 30 Q72 25 80 30');
+    moonEls.browL().setAttribute('opacity','1'); moonEls.browR().setAttribute('opacity','1');
+    moonEls.blushL().setAttribute('opacity','0'); moonEls.blushR().setAttribute('opacity','0');
+    moonEls.teeth().setAttribute('opacity','0');
+    moonEls.pupilL().setAttribute('opacity','.6'); moonEls.pupilR().setAttribute('opacity','.6');
+    moonEls.pupilL().setAttribute('cx','38'); moonEls.pupilR().setAttribute('cx','72');
+    moonEls.pupilL().setAttribute('cy','44'); moonEls.pupilR().setAttribute('cy','42');
+    moonEls.moonBody().style.background='radial-gradient(circle at 36% 32%, #fef9c3, #fde68a 45%, #ca8a04 80%, #a16207 100%)';
   },
   // 3 - shocked
   () => {
-    eyeL.setAttribute('ry','10'); eyeR.setAttribute('ry','10');
-    eyeL.setAttribute('cy','43'); eyeR.setAttribute('cy','43');
-    eyeL.setAttribute('fill','#7f1d1d'); eyeR.setAttribute('fill','#7f1d1d');
-    mouth.setAttribute('d','M42 65 Q55 82 68 65');
-    browL.setAttribute('d','M28 30 Q38 24 46 30');
-    browR.setAttribute('d','M64 30 Q72 24 82 30');
-    browL.setAttribute('opacity','1'); browR.setAttribute('opacity','1');
-    blushL.setAttribute('opacity','0'); blushR.setAttribute('opacity','0');
-    teeth.setAttribute('opacity','1');
-    pupilL.setAttribute('opacity','.8'); pupilR.setAttribute('opacity','.8');
-    pupilL.setAttribute('cx','37'); pupilR.setAttribute('cx','73');
-    pupilL.setAttribute('cy','43'); pupilR.setAttribute('cy','43');
-    pupilL.setAttribute('r','4'); pupilR.setAttribute('r','4');
-    moonBody.style.background='radial-gradient(circle at 36% 32%, #fefce8, #fde68a 40%, #b45309 80%, #78350f 100%)';
-    shake(document.getElementById('moon-wrap'));
+    moonEls.eyeL().setAttribute('ry','10'); moonEls.eyeR().setAttribute('ry','10');
+    moonEls.eyeL().setAttribute('cy','43'); moonEls.eyeR().setAttribute('cy','43');
+    moonEls.eyeL().setAttribute('fill','#7f1d1d'); moonEls.eyeR().setAttribute('fill','#7f1d1d');
+    moonEls.mouth().setAttribute('d','M42 65 Q55 82 68 65');
+    moonEls.browL().setAttribute('d','M28 30 Q38 24 46 30');
+    moonEls.browR().setAttribute('d','M64 30 Q72 24 82 30');
+    moonEls.browL().setAttribute('opacity','1'); moonEls.browR().setAttribute('opacity','1');
+    moonEls.blushL().setAttribute('opacity','0'); moonEls.blushR().setAttribute('opacity','0');
+    moonEls.teeth().setAttribute('opacity','1');
+    moonEls.pupilL().setAttribute('opacity','.8'); moonEls.pupilR().setAttribute('opacity','.8');
+    moonEls.pupilL().setAttribute('cx','37'); moonEls.pupilR().setAttribute('cx','73');
+    moonEls.pupilL().setAttribute('cy','43'); moonEls.pupilR().setAttribute('cy','43');
+    moonEls.pupilL().setAttribute('r','4'); moonEls.pupilR().setAttribute('r','4');
+    moonEls.moonBody().style.background='radial-gradient(circle at 36% 32%, #fefce8, #fde68a 40%, #b45309 80%, #78350f 100%)';
+    shake(getEl('moon-wrap'));
   },
   // 4 - evil
   () => {
-    eyeL.setAttribute('ry','9'); eyeR.setAttribute('ry','9');
-    eyeL.setAttribute('cy','44'); eyeR.setAttribute('cy','44');
-    eyeL.setAttribute('fill','#dc2626'); eyeR.setAttribute('fill','#dc2626');
-    mouth.setAttribute('d','M32 62 Q38 54 44 62 Q55 74 66 62 Q72 54 78 62');
-    mouth.setAttribute('stroke','#7f1d1d');
-    browL.setAttribute('d','M28 33 Q38 26 46 33');
-    browR.setAttribute('d','M64 33 Q72 26 82 33');
-    browL.setAttribute('opacity','1'); browR.setAttribute('opacity','1');
-    blushL.setAttribute('opacity','0'); blushR.setAttribute('opacity','0');
-    teeth.setAttribute('opacity','0');
-    pupilL.setAttribute('opacity','1'); pupilR.setAttribute('opacity','1');
-    pupilL.setAttribute('cx','38'); pupilR.setAttribute('cx','72');
-    pupilL.setAttribute('cy','44'); pupilR.setAttribute('cy','44');
-    pupilL.setAttribute('r','4.5'); pupilR.setAttribute('r','4.5');
-    moonBody.style.background='radial-gradient(circle at 36% 32%, #fef9c3, #fbbf24 40%, #92400e 75%, #451a03 100%)';
-    moonBody.style.boxShadow='0 0 50px rgba(220,38,38,.6), 0 0 100px rgba(220,38,38,.3)';
+    moonEls.eyeL().setAttribute('ry','9'); moonEls.eyeR().setAttribute('ry','9');
+    moonEls.eyeL().setAttribute('cy','44'); moonEls.eyeR().setAttribute('cy','44');
+    moonEls.eyeL().setAttribute('fill','#dc2626'); moonEls.eyeR().setAttribute('fill','#dc2626');
+    moonEls.mouth().setAttribute('d','M32 62 Q38 54 44 62 Q55 74 66 62 Q72 54 78 62');
+    moonEls.mouth().setAttribute('stroke','#7f1d1d');
+    moonEls.browL().setAttribute('d','M28 33 Q38 26 46 33');
+    moonEls.browR().setAttribute('d','M64 33 Q72 26 82 33');
+    moonEls.browL().setAttribute('opacity','1'); moonEls.browR().setAttribute('opacity','1');
+    moonEls.blushL().setAttribute('opacity','0'); moonEls.blushR().setAttribute('opacity','0');
+    moonEls.teeth().setAttribute('opacity','0');
+    moonEls.pupilL().setAttribute('opacity','1'); moonEls.pupilR().setAttribute('opacity','1');
+    moonEls.pupilL().setAttribute('cx','38'); moonEls.pupilR().setAttribute('cx','72');
+    moonEls.pupilL().setAttribute('cy','44'); moonEls.pupilR().setAttribute('cy','44');
+    moonEls.pupilL().setAttribute('r','4.5'); moonEls.pupilR().setAttribute('r','4.5');
+    moonEls.moonBody().style.background='radial-gradient(circle at 36% 32%, #fef9c3, #fbbf24 40%, #92400e 75%, #451a03 100%)';
+    moonEls.moonBody().style.boxShadow='0 0 50px rgba(220,38,38,.6), 0 0 100px rgba(220,38,38,.3)';
   }
 ];
 
@@ -740,6 +814,7 @@ function shake(el) {
 
 function spawnParticles() {
   const colors=['#a855f7','#f0abfc','#fbbf24','#86efac','#93c5fd','#f9a8d4'];
+  const forest = getEl('forest');
   for(let i=0; i<14; i++) {
     const p=document.createElement('div'); p.className='moon-particle';
     const angle=Math.random()*Math.PI*2;
@@ -752,7 +827,7 @@ function spawnParticles() {
     p.style.height=`${sz}px`;
     p.style.background=col;
     p.style.boxShadow=`0 0 ${sz*2}px ${col}`;
-    document.getElementById('forest').appendChild(p);
+    forest.appendChild(p);
     setTimeout(()=>p.remove(), 1200);
   }
 }
@@ -770,17 +845,17 @@ function moonClick() {
 }
 
 function triggerEvil() {
-  const fl = document.getElementById('flash');
+  const fl = getEl('flash');
   fl.style.transition='opacity .08s'; fl.style.opacity='1';
   setTimeout(() => {
     fl.style.transition='opacity .5s'; fl.style.opacity='0';
-    const mw = document.getElementById('moon-wrap');
+    const mw = getEl('moon-wrap');
     mw.style.transition='all .7s cubic-bezier(.4,0,.2,1)';
     mw.style.width='400px'; mw.style.height='400px';
     mw.style.top='50%'; mw.style.transform='translate(-50%,-50%)';
     mw.style.zIndex='150';
     setTimeout(() => {
-      document.getElementById('dark-realm').classList.add('show');
+      getEl('dark-realm').classList.add('show');
       mw.style.opacity='0';
       setTimeout(() => { mw.style.display='none'; drStart(); },600);
     },600);
@@ -841,22 +916,22 @@ function drStart() {
 
 function drRender(idx) {
   const sc = drScenes[idx]; if(!sc) return;
-  const narr = document.getElementById('dr-narr'); narr.innerHTML='';
+  const narr = getEl('dr-narr'); narr.innerHTML='';
   sc.lines.forEach((l,i) => {
     const s=document.createElement('span');
     s.className='dr-l'+(l.h?' h':'');
     s.textContent=l.t; narr.appendChild(s);
     setTimeout(()=>s.classList.add('v'), 180+i*300);
   });
-  const ch = document.getElementById('dr-ch'); ch.innerHTML='';
-  document.getElementById('dr-fb').className=''; document.getElementById('dr-fb').innerHTML='';
-  document.getElementById('dr-inp').style.display='none'; document.getElementById('dr-inp').innerHTML='';
+  const ch = getEl('dr-ch'); ch.innerHTML='';
+  const fb = getEl('dr-fb'); fb.className=''; fb.innerHTML='';
+  const ip = getEl('dr-inp'); ip.style.display='none'; ip.innerHTML='';
   drDone[idx]=false;
   const delay = sc.lines.length*300+400;
 
   if(sc.type === 'input') {
     setTimeout(() => {
-      const ip=document.getElementById('dr-inp'); ip.style.display='block';
+      ip.style.display='block';
       ip.innerHTML='<textarea id="dr-txt" placeholder="Nói thật với mặt trăng..."></textarea><button class="dr-sub" onclick="drSubmit()">Trả lời ✦</button>';
     }, delay);
   } else if(sc.choices) {
@@ -872,7 +947,7 @@ function drRender(idx) {
 function drChoice(scIdx,btnIdx,c) {
   if(drDone[scIdx]) return;
   const btns=document.querySelectorAll('.dr-btn');
-  const fb=document.getElementById('dr-fb');
+  const fb=getEl('dr-fb');
   if(c.ok) {
     drDone[scIdx]=true;
     btns.forEach((b,i) => {b.disabled=true; if(i===btnIdx) b.classList.add('ok');});
@@ -891,19 +966,23 @@ function drChoice(scIdx,btnIdx,c) {
 }
 
 function drSubmit() {
-  const v=document.getElementById('dr-txt').value.trim(); if(!v) return;
-  document.getElementById('dr-inp').innerHTML='<div style="text-align:center;padding:10px 0;"><em style="color:#ddd6fe;font-size:14px;font-family:Georgia,serif;">"' + v + '"</em></div>';
-  const fb=document.getElementById('dr-fb');
+  const txt = document.getElementById('dr-txt');
+  const v = txt ? txt.value.trim() : ''; 
+  if(!v) return;
+  const ip=getEl('dr-inp');
+  ip.innerHTML='<div style="text-align:center;padding:10px 0;"><em style="color:#ddd6fe;font-size:14px;font-family:Georgia,serif;">"' + v + '"</em></div>';
+  const fb=getEl('dr-fb');
   fb.innerHTML='Mặt trăng nhìn câu trả lời của bạn rất lâu.<br><br><em style="color:#f0abfc">"Tất cả những ai chạm vào ta đều nghĩ mình chỉ tò mò."</em><br><br><span style="color:#ddd6fe">"Nhưng thật ra — họ đang tìm kiếm điều gì đó mà ánh sáng ban ngày không thể cho."</span><br><br><em style="color:#c4b5fd">"Ta sẽ nhớ câu trả lời này."</em>';
   fb.className='s';
   setTimeout(()=>{
-    document.getElementById('dr-ch').innerHTML='<div style="background:rgba(120,0,180,.15);border:1px solid rgba(168,85,247,.4);border-radius:14px;padding:20px;text-align:center;margin-top:10px;"><div style="font-size:12px;color:#f0abfc;letter-spacing:2px;margin-bottom:10px;font-family:sans-serif;">🌑 BÍ MẬT CUỐI CÙNG 🌑</div><p style="color:#ddd6fe;font-size:13px;line-height:1.85;font-family:sans-serif;">Thỏ, Cáo, Gấu, Cú — họ không phải bốn nhân vật khác nhau.<br><strong style="color:#f0abfc">Họ là bốn phần của cùng một người.</strong><br><br>Người chạy trốn. Người che giấu. Người ngủ quên. Người giữ im lặng.<br><em style="color:#c4b5fd">Và mặt trăng biết tất cả.</em></p><button class="dr-btn" style="margin-top:16px;text-align:center;border-color:rgba(168,85,247,.5);" onclick="escapeRealm()">Rời khỏi không gian này ↩</button></div>';
+    const ch = getEl('dr-ch');
+    ch.innerHTML='<div style="background:rgba(120,0,180,.15);border:1px solid rgba(168,85,247,.4);border-radius:14px;padding:20px;text-align:center;margin-top:10px;"><div style="font-size:12px;color:#f0abfc;letter-spacing:2px;margin-bottom:10px;font-family:sans-serif;">🌑 BÍ MẬT CUỐI CÙNG 🌑</div><p style="color:#ddd6fe;font-size:13px;line-height:1.85;font-family:sans-serif;">Thỏ, Cáo, Gấu, Cú — họ không phải bốn nhân vật khác nhau.<br><strong style="color:#f0abfc">Họ là bốn phần của cùng một người.</strong><br><br>Người chạy trốn. Người che giấu. Người ngủ quên. Người giữ im lặng.<br><em style="color:#c4b5fd">Và mặt trăng biết tất cả.</em></p><button class="dr-btn" style="margin-top:16px;text-align:center;border-color:rgba(168,85,247,.5);" onclick="escapeRealm()">Rời khỏi không gian này ↩</button></div>';
   },3200);
 }
 
 function escapeRealm() {
-  const dr=document.getElementById('dark-realm');
-  const fl=document.getElementById('flash');
+  const dr=getEl('dark-realm');
+  const fl=getEl('flash');
   fl.style.transition='opacity .1s'; fl.style.opacity='1';
   setTimeout(() => {
     dr.style.opacity='0';
@@ -911,13 +990,13 @@ function escapeRealm() {
     setTimeout(() => {
       dr.classList.remove('show'); dr.style.opacity='';
       evilDone=false; moonStage=0;
-      const mw=document.getElementById('moon-wrap');
-      mw.style.cssText='position:absolute;top:100px;left:50%;transform:translate(-50%);width:110px;height:110px;cursor:pointer;z-index:35;';
+      const mw=getEl('moon-wrap');
+      mw.style.cssText='position:absolute;top:100px;left:50%;transform:translate(-50%);width:110px;height:110px;cursor:pointer;z-index:35;animation: moonFloat 5s ease-in-out infinite;will-change: transform;';
       mw.style.display=''; mw.style.opacity='1';
-      moonBody.style.background='radial-gradient(circle at 36% 32%, #fffbeb, #fef3c7 38%, #fde68a 70%, #f59e0b 100%)';
-      moonBody.style.boxShadow='0 0 28px rgba(253,230,138,.3), 0 0 55px rgba(251,191,36,.15)';
+      moonEls.moonBody().style.background='radial-gradient(circle at 36% 32%, #fffbeb, #fef3c7 38%, #fde68a 70%, #f59e0b 100%)';
+      moonEls.moonBody().style.boxShadow='0 0 28px rgba(253,230,138,.3), 0 0 55px rgba(251,191,36,.15)';
       applyStage(0);
-      document.getElementById('moon-face').style.opacity='0';
+      getEl('moon-face').style.opacity='0';
     },900);
   },150);
 }
