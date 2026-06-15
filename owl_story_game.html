@@ -1,0 +1,423 @@
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+#og{width:100%;min-height:720px;background:#070510;border-radius:16px;overflow:hidden;position:relative;font-family:'Georgia',serif;}
+#op{position:relative;z-index:5;display:flex;flex-direction:column;align-items:center;}
+#ohdr{text-align:center;padding:26px 20px 0;width:100%;}
+#oct{color:#a78bfa;font-size:11px;letter-spacing:3px;font-family:sans-serif;margin-bottom:5px;}
+#ocn{color:#ede9fe;font-size:20px;line-height:1.4;}
+#oart{margin:18px auto 0;width:280px;height:170px;flex-shrink:0;}
+#onarr{max-width:520px;width:90%;margin:16px auto 0;text-align:center;}
+.ol{color:#ddd6fe;font-size:15px;line-height:1.85;opacity:0;transform:translateY(8px);transition:opacity .5s,transform .5s;font-style:italic;display:block;margin:2px 0;}
+.ol.v{opacity:1;transform:none;}
+.ol.d{color:#c4b5fd;font-style:normal;}
+.ol.w{color:#fde68a;font-style:normal;}
+.ol.r{color:#f9a8d4;font-style:normal;}
+#ofb{max-width:480px;width:90%;margin:14px auto 0;background:#120d24;border:1px solid rgba(167,139,250,.4);border-radius:14px;padding:16px 20px;color:#ddd6fe;font-size:14px;line-height:1.7;font-family:sans-serif;display:none;}
+#ofb.s{display:block;}
+#och{max-width:500px;width:90%;margin:18px auto 0;display:flex;flex-direction:column;gap:10px;padding-bottom:28px;}
+.ob{background:#120d24;border:1px solid rgba(167,139,250,.4);border-radius:12px;color:#ddd6fe;font-size:14px;padding:13px 18px;cursor:pointer;font-family:'Georgia',serif;text-align:left;transition:all .25s;line-height:1.5;}
+.ob:hover{background:#1a1035;border-color:#a78bfa;transform:translateX(4px);}
+.ob.ok{border-color:#4ade80;background:#061a0e;color:#bbf7d0;}
+.ob.no{border-color:#f87171;background:#1a0606;color:#fca5a5;}
+.ob:disabled{cursor:default;transform:none;}
+#oprog{position:absolute;top:0;left:0;right:0;height:3px;background:rgba(255,255,255,.08);z-index:20;}
+#opf{height:100%;background:#7c3aed;transition:width .6s ease;border-radius:0 2px 2px 0;}
+#oinp{max-width:460px;width:90%;margin:18px auto 0;padding-bottom:28px;display:none;}
+#otxt{width:100%;background:#120d24;border:1px solid rgba(167,139,250,.45);border-radius:12px;color:#ddd6fe;font-size:15px;padding:13px 17px;font-family:'Georgia',serif;resize:none;height:75px;outline:none;}
+#otxt:focus{border-color:#a78bfa;}
+#otxt::placeholder{color:rgba(196,181,253,.35);}
+.osub{margin-top:10px;width:100%;background:#1a1035;border:1px solid rgba(167,139,250,.5);border-radius:12px;color:#ddd6fe;font-size:14px;padding:11px;cursor:pointer;font-family:'Georgia',serif;transition:all .25s;}
+.osub:hover{background:#221448;}
+#odiary{max-width:460px;width:90%;margin:0 auto 28px;background:#120d24;border:1px solid rgba(167,139,250,.35);border-radius:16px;padding:22px;text-align:center;}
+#odiary h3{color:#ede9fe;font-size:17px;margin-bottom:10px;}
+#odiary p{color:#a78bfa;font-size:13px;line-height:1.7;font-family:sans-serif;}
+.onxt{margin-top:12px;background:#1a1035;border:1px solid rgba(167,139,250,.45);border-radius:10px;color:#ddd6fe;font-size:13px;padding:10px 18px;cursor:pointer;font-family:sans-serif;transition:all .2s;display:inline-block;margin-right:6px;margin-top:8px;}
+.onxt:hover{background:#221448;}
+.scroll-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:480px;width:90%;margin:16px auto 0;}
+.scroll-card{background:#120d24;border:1px solid rgba(167,139,250,.3);border-radius:12px;padding:14px 16px;cursor:pointer;transition:all .25s;color:#ddd6fe;font-size:13px;font-family:sans-serif;line-height:1.6;text-align:center;}
+.scroll-card:hover{background:#1a1035;border-color:#a78bfa;}
+.scroll-card.pick{border-color:#fbbf24;background:#1a1400;}
+.scroll-card.reveal-ok{border-color:#4ade80;background:#061a0e;}
+.scroll-card.reveal-no{border-color:#f87171;background:#1a0606;opacity:.65;}
+.scroll-icon{font-size:24px;margin-bottom:6px;display:block;}
+.scroll-sub{color:#7c3aed;font-size:11px;margin-top:4px;font-family:sans-serif;}
+.moon-flicker{position:absolute;pointer-events:none;border-radius:50%;background:rgba(196,181,253,.15);animation:flicker var(--d) ease-in-out infinite;top:var(--t);left:var(--l);width:var(--s);height:var(--s);}
+@keyframes flicker{0%,100%{opacity:.15;}50%{opacity:.45;}}
+</style>
+
+<style>
+.back-btn{
+  position:absolute;top:20px;left:20px;z-index:25;
+  background:rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.2);
+  color:#a78bfa;
+  padding:8px 16px;
+  border-radius:12px;
+  cursor:pointer;
+  font-family:'Georgia',serif;
+  font-size:13px;
+  transition:all 0.3s;
+  text-decoration:none;
+  display:inline-block;
+}
+.back-btn:hover{
+  background:rgba(255,255,255,0.18);
+  border-color:rgba(255,255,255,0.5);
+}
+</style>
+<div id="og">
+  <a href="index.html" class="back-btn">← Quay lại rừng</a>
+  <div id="oprog"><div id="opf" style="width:0%"></div></div>
+  <div id="op">
+    <div id="ohdr">
+      <div id="oct">Tuyến Cú</div>
+      <div id="ocn">Thư Viện Của Những Bí Mật Chưa Được Nói</div>
+    </div>
+    <div id="oart"></div>
+    <div id="onarr"></div>
+    <div id="ofb"></div>
+    <div id="och"></div>
+    <div id="oinp"></div>
+  </div>
+</div>
+
+<script>
+function addMoonLight(){
+  const g=document.getElementById('og');
+  for(let i=0;i<14;i++){
+    const m=document.createElement('div');m.className='moon-flicker';
+    const s=(8+Math.random()*30)+'px';
+    m.style.cssText=`--d:${2+Math.random()*5}s;--t:${Math.random()*90}%;--l:${Math.random()*95}%;--s:${s};animation-delay:${Math.random()*4}s;`;
+    g.appendChild(m);
+  }
+}
+
+function drawOwlIntro(el){el.innerHTML=`<svg width="280" height="170" viewBox="0 0 280 170"><rect width="280" height="170" fill="#070510" rx="12"/>
+<ellipse cx="140" cy="155" rx="115" ry="22" fill="#04030c"/>
+<rect x="18" y="45" width="12" height="105" fill="#1e0a3d"/><ellipse cx="24" cy="31" rx="22" ry="36" fill="#120828"/>
+<rect x="250" y="55" width="12" height="95" fill="#1e0a3d"/><ellipse cx="256" cy="41" rx="20" ry="32" fill="#120828"/>
+<circle cx="80" cy="22" r="22" fill="#c4b5fd" opacity=".08"/><circle cx="80" cy="22" r="14" fill="#c4b5fd" opacity=".18"/><circle cx="80" cy="22" r="7" fill="#ddd6fe" opacity=".4"/>
+<circle cx="55" cy="14" r="1.5" fill="#c4b5fd" opacity=".6"/><circle cx="120" cy="8" r="1" fill="#c4b5fd" opacity=".5"/><circle cx="200" cy="15" r="1.5" fill="#c4b5fd" opacity=".7"/><circle cx="240" cy="25" r="1" fill="#c4b5fd" opacity=".5"/><circle cx="165" cy="10" r="1.5" fill="#c4b5fd" opacity=".6"/>
+<ellipse cx="140" cy="115" rx="28" ry="32" fill="#312058"/>
+<ellipse cx="124" cy="99" rx="12" ry="14" fill="#312058"/><ellipse cx="156" cy="99" rx="12" ry="14" fill="#312058"/>
+<ellipse cx="140" cy="110" rx="20" ry="24" fill="#4c2d8a"/>
+<circle cx="132" cy="105" r="7" fill="#fef9c3" stroke="#fbbf24" stroke-width=".8"/><circle cx="148" cy="105" r="7" fill="#fef9c3" stroke="#fbbf24" stroke-width=".8"/>
+<circle cx="132" cy="105" r="4" fill="#1a0f2e"/><circle cx="148" cy="105" r="4" fill="#1a0f2e"/>
+<circle cx="133" cy="104" r="1.5" fill="white"/><circle cx="149" cy="104" r="1.5" fill="white"/>
+<polygon points="137,111 140,116 143,111" fill="#f59e0b"/>
+<ellipse cx="122" cy="97" rx="5" ry="6" fill="#6d28d9" opacity=".7"/>
+<ellipse cx="158" cy="97" rx="5" ry="6" fill="#6d28d9" opacity=".7"/>
+<rect x="126" y="75" width="4" height="16" rx="2" fill="#312058"/><rect x="150" y="75" width="4" height="16" rx="2" fill="#312058"/>
+<polygon points="124,75 128,65 132,75" fill="#312058"/><polygon points="148,75 152,65 156,75" fill="#312058"/>
+<ellipse cx="140" cy="138" rx="30" ry="10" fill="#312058" opacity=".6"/>
+<text x="140" y="163" text-anchor="middle" fill="#a78bfa" font-size="10" font-family="sans-serif">Cú mèo canh giữ những điều không ai dám nói</text></svg>`;}
+
+function drawOwlLibrary(el){el.innerHTML=`<svg width="280" height="170" viewBox="0 0 280 170"><rect width="280" height="170" fill="#070510" rx="12"/>
+<rect x="30" y="20" width="220" height="135" rx="6" fill="#0d0920" stroke="#4c1d95" stroke-width="1" opacity=".8"/>
+<rect x="38" y="28" width="204" height="4" rx="2" fill="#4c1d95" opacity=".5"/>
+<rect x="42" y="40" width="18" height="55" rx="2" fill="#1e0a3d"/><rect x="63" y="45" width="14" height="50" rx="2" fill="#2d1060"/><rect x="80" y="38" width="16" height="57" rx="2" fill="#3b0764"/><rect x="99" y="43" width="12" height="52" rx="2" fill="#1e0a3d"/><rect x="114" y="36" width="18" height="59" rx="2" fill="#4c1d95" opacity=".8"/><rect x="135" y="41" width="14" height="54" rx="2" fill="#2d1060"/><rect x="152" y="38" width="16" height="57" rx="2" fill="#1e0a3d"/><rect x="171" y="44" width="12" height="51" rx="2" fill="#3b0764"/><rect x="186" y="37" width="18" height="58" rx="2" fill="#2d1060"/><rect x="207" y="42" width="18" height="53" rx="2" fill="#4c1d95" opacity=".6"/>
+<rect x="38" y="95" width="204" height="3" rx="1" fill="#4c1d95" opacity=".4"/>
+<rect x="45" y="102" width="14" height="40" rx="2" fill="#2d1060"/><rect x="62" y="105" width="18" height="37" rx="2" fill="#1e0a3d"/><rect x="83" y="100" width="12" height="42" rx="2" fill="#3b0764"/><rect x="98" y="103" width="16" height="39" rx="2" fill="#4c1d95" opacity=".7"/><rect x="117" y="101" width="14" height="41" rx="2" fill="#1e0a3d"/><rect x="134" y="104" width="18" height="38" rx="2" fill="#2d1060"/><rect x="155" y="100" width="12" height="42" rx="2" fill="#3b0764"/><rect x="170" y="103" width="16" height="39" rx="2" fill="#1e0a3d"/><rect x="189" y="101" width="14" height="41" rx="2" fill="#4c1d95" opacity=".5"/><rect x="206" y="105" width="18" height="37" rx="2" fill="#2d1060"/>
+<circle cx="114" cy="60" r="5" fill="#fbbf24" opacity=".8"/>
+<text x="140" y="163" text-anchor="middle" fill="#a78bfa" font-size="10" font-family="sans-serif">Thư viện những bí mật chưa được nói</text></svg>`;}
+
+function drawOwlScrolls(el){el.innerHTML=`<svg width="280" height="170" viewBox="0 0 280 170"><rect width="280" height="170" fill="#070510" rx="12"/>
+<rect x="52" y="30" width="70" height="52" rx="6" fill="#120d24" stroke="#7c3aed" stroke-width=".8"/>
+<ellipse cx="87" cy="30" rx="10" ry="5" fill="#1e0a3d" stroke="#7c3aed" stroke-width=".8"/>
+<ellipse cx="87" cy="82" rx="10" ry="5" fill="#1e0a3d" stroke="#7c3aed" stroke-width=".8"/>
+<line x1="67" y1="45" x2="107" y2="45" stroke="#4c1d95" stroke-width=".6" opacity=".7"/>
+<line x1="67" y1="52" x2="107" y2="52" stroke="#4c1d95" stroke-width=".6" opacity=".7"/>
+<line x1="67" y1="59" x2="107" y2="59" stroke="#4c1d95" stroke-width=".6" opacity=".7"/>
+<text x="87" y="73" text-anchor="middle" fill="#c4b5fd" font-size="9" font-family="sans-serif">BÍ MẬT 1</text>
+<rect x="158" y="30" width="70" height="52" rx="6" fill="#120d24" stroke="#7c3aed" stroke-width=".8"/>
+<ellipse cx="193" cy="30" rx="10" ry="5" fill="#1e0a3d" stroke="#7c3aed" stroke-width=".8"/>
+<ellipse cx="193" cy="82" rx="10" ry="5" fill="#1e0a3d" stroke="#7c3aed" stroke-width=".8"/>
+<line x1="173" y1="45" x2="213" y2="45" stroke="#4c1d95" stroke-width=".6" opacity=".7"/>
+<line x1="173" y1="52" x2="213" y2="52" stroke="#4c1d95" stroke-width=".6" opacity=".7"/>
+<line x1="173" y1="59" x2="213" y2="59" stroke="#4c1d95" stroke-width=".6" opacity=".7"/>
+<text x="193" y="73" text-anchor="middle" fill="#c4b5fd" font-size="9" font-family="sans-serif">BÍ MẬT 2</text>
+<rect x="105" y="95" width="70" height="52" rx="6" fill="#120d24" stroke="#fbbf24" stroke-width="1"/>
+<ellipse cx="140" cy="95" rx="10" ry="5" fill="#1e0a3d" stroke="#fbbf24" stroke-width="1"/>
+<ellipse cx="140" cy="147" rx="10" ry="5" fill="#1e0a3d" stroke="#fbbf24" stroke-width="1"/>
+<line x1="120" y1="110" x2="160" y2="110" stroke="#92400e" stroke-width=".6" opacity=".7"/>
+<line x1="120" y1="117" x2="160" y2="117" stroke="#92400e" stroke-width=".6" opacity=".7"/>
+<line x1="120" y1="124" x2="160" y2="124" stroke="#92400e" stroke-width=".6" opacity=".7"/>
+<text x="140" y="138" text-anchor="middle" fill="#fbbf24" font-size="9" font-family="sans-serif">BÍ MẬT LỚN</text>
+<text x="140" y="163" text-anchor="middle" fill="#a78bfa" font-size="10" font-family="sans-serif">Ba cuộn sách chứa ba sự thật</text></svg>`;}
+
+function drawOwlMirror(el){el.innerHTML=`<svg width="280" height="170" viewBox="0 0 280 170"><rect width="280" height="170" fill="#070510" rx="12"/>
+<ellipse cx="140" cy="155" rx="50" ry="12" fill="#0d0920"/>
+<rect x="126" y="130" width="28" height="25" rx="2" fill="#1e0a3d"/>
+<ellipse cx="140" cy="80" rx="52" ry="68" fill="#0d0920" stroke="#7c3aed" stroke-width="1.5"/>
+<ellipse cx="140" cy="80" rx="46" ry="62" fill="#120d24" stroke="#4c1d95" stroke-width=".8"/>
+<ellipse cx="140" cy="75" rx="36" ry="50" fill="#1a1035" opacity=".9"/>
+<circle cx="140" cy="65" r="18" fill="#c4b5fd" opacity=".08"/>
+<circle cx="132" cy="62" r="5" fill="#fef9c3" opacity=".5"/>
+<circle cx="148" cy="62" r="5" fill="#fef9c3" opacity=".5"/>
+<path d="M133 74 Q140 80 147 74" fill="none" stroke="#c4b5fd" stroke-width="1" opacity=".5"/>
+<circle cx="100" cy="40" r="2" fill="#c4b5fd" opacity=".4"/>
+<circle cx="180" cy="35" r="1.5" fill="#c4b5fd" opacity=".5"/>
+<text x="140" y="163" text-anchor="middle" fill="#a78bfa" font-size="10" font-family="sans-serif">Gương nhìn thấu tâm hồn</text></svg>`;}
+
+function drawOwlSecret(el){el.innerHTML=`<svg width="280" height="170" viewBox="0 0 280 170"><rect width="280" height="170" fill="#070510" rx="12"/>
+<ellipse cx="140" cy="152" rx="110" ry="22" fill="#04030c"/>
+<rect x="18" y="45" width="12" height="105" fill="#1e0a3d"/><ellipse cx="24" cy="31" rx="22" ry="36" fill="#120828"/>
+<rect x="250" y="55" width="12" height="95" fill="#1e0a3d"/><ellipse cx="256" cy="41" rx="20" ry="32" fill="#120828"/>
+<ellipse cx="140" cy="115" rx="28" ry="32" fill="#312058"/>
+<ellipse cx="124" cy="99" rx="12" ry="14" fill="#312058"/>
+<ellipse cx="156" cy="99" rx="12" ry="14" fill="#312058"/>
+<ellipse cx="140" cy="110" rx="20" ry="24" fill="#4c2d8a"/>
+<circle cx="132" cy="105" r="7" fill="#fef9c3" stroke="#fbbf24" stroke-width=".8"/>
+<circle cx="148" cy="105" r="7" fill="#fef9c3" stroke="#fbbf24" stroke-width=".8"/>
+<circle cx="132" cy="105" r="4" fill="#1a0f2e"/><circle cx="148" cy="105" r="4" fill="#1a0f2e"/>
+<circle cx="133" cy="104" r="1.5" fill="white"/><circle cx="149" cy="104" r="1.5" fill="white"/>
+<polygon points="137,111 140,116 143,111" fill="#f59e0b"/>
+<rect x="126" y="75" width="4" height="16" rx="2" fill="#312058"/><rect x="150" y="75" width="4" height="16" rx="2" fill="#312058"/>
+<polygon points="124,75 128,65 132,75" fill="#312058"/><polygon points="148,75 152,65 156,75" fill="#312058"/>
+<circle cx="90" cy="50" r="16" fill="#120d24" stroke="#4c1d95" stroke-width=".8"/>
+<text x="90" y="55" text-anchor="middle" fill="#a78bfa" font-size="11" font-family="sans-serif">???</text>
+<line x1="104" y1="58" x2="122" y2="82" stroke="#4c1d95" stroke-width=".7" stroke-dasharray="3,2" opacity=".6"/>
+<circle cx="192" cy="45" r="14" fill="#120d24" stroke="#4c1d95" stroke-width=".8"/>
+<text x="192" y="50" text-anchor="middle" fill="#a78bfa" font-size="9" font-family="sans-serif">???</text>
+<line x1="180" y1="52" x2="162" y2="78" stroke="#4c1d95" stroke-width=".7" stroke-dasharray="3,2" opacity=".6"/>
+<text x="140" y="163" text-anchor="middle" fill="#a78bfa" font-size="10" font-family="sans-serif">Cú biết bí mật của tất cả</text></svg>`;}
+
+function drawOwlEnd(el){el.innerHTML=`<svg width="280" height="170" viewBox="0 0 280 170"><rect width="280" height="170" fill="#070510" rx="12"/>
+<circle cx="70" cy="30" r="4" fill="#a78bfa" opacity=".8"/>
+<circle cx="115" cy="15" r="3" fill="#c4b5fd" opacity=".75"/>
+<circle cx="165" cy="25" r="4" fill="#a78bfa" opacity=".85"/>
+<circle cx="215" cy="12" r="2.5" fill="#ddd6fe" opacity=".7"/>
+<circle cx="45" cy="60" r="2.5" fill="#c4b5fd" opacity=".5"/>
+<circle cx="245" cy="55" r="3" fill="#a78bfa" opacity=".6"/>
+<circle cx="90" cy="10" r="2" fill="#ddd6fe" opacity=".55"/>
+<circle cx="240" cy="90" r="2" fill="#c4b5fd" opacity=".55"/>
+<circle cx="50" cy="100" r="2.5" fill="#a78bfa" opacity=".5"/>
+<circle cx="80" cy="22" r="22" fill="#c4b5fd" opacity=".08"/><circle cx="80" cy="22" r="14" fill="#c4b5fd" opacity=".18"/><circle cx="80" cy="22" r="7" fill="#ddd6fe" opacity=".4"/>
+<text x="140" y="110" text-anchor="middle" fill="#c4b5fd" font-size="16" font-family="Georgia,serif">✦</text>
+<text x="105" y="95" text-anchor="middle" fill="#a78bfa" font-size="12" opacity=".7">✦</text>
+<text x="175" y="100" text-anchor="middle" fill="#7c3aed" font-size="10" opacity=".7">✦</text>
+<text x="140" y="163" text-anchor="middle" fill="#ddd6fe" font-size="11" font-family="sans-serif">Bí mật cuối cùng được giải phóng</text></svg>`;}
+
+const scrollData=[
+  {icon:'🌑',label:'Cuộn Sách Bóng Tối',sub:'bí mật về nỗi sợ',safe:false,msg:'Cuộn sách này chứa nỗi sợ của tất cả mọi người — nhưng không phải bí mật Cú muốn chia sẻ lần này.'},
+  {icon:'🌕',label:'Cuộn Sách Ánh Trăng',sub:'bí mật về hy vọng',safe:true,msg:'Đây rồi — bí mật Cú đã giữ suốt ngàn năm. Ánh trăng không tự phát sáng. Nó chỉ phản chiếu ánh mặt trời mà nó nhớ từ ban ngày.'},
+  {icon:'⭐',label:'Cuộn Sách Ngôi Sao',sub:'bí mật về thời gian',safe:false,msg:'Cuộn sách này nói về thời gian — nhưng bí mật quan trọng nhất không nằm ở đây.'},
+];
+
+let scrollDone=false,mirrorDone=false,voiceDone=false;
+
+function pickScroll(i){
+  if(scrollDone)return;
+  const cards=document.querySelectorAll('.scroll-card');
+  cards.forEach((c,ci)=>{
+    c.style.pointerEvents='none';
+    c.classList.add(scrollData[ci].safe?'reveal-ok':'reveal-no');
+  });
+  cards[i].classList.add('pick');
+  scrollDone=true;
+  const fb=document.getElementById('ofb');
+  if(scrollData[i].safe){
+    fb.innerHTML=`<strong style="color:#4ade80">Cuộn Sách Ánh Trăng mở ra.</strong><br><br>
+<span style="color:#ddd6fe">${scrollData[i].msg}</span><br><br>
+<em style="color:#c4b5fd">"Giống như ta vậy — ta chỉ nhớ những điều người khác đã chiếu sáng cho ta."</em>`;
+    fb.className='s';
+    setTimeout(()=>{document.getElementById('och').innerHTML=`<button class="ob ok" onclick="ogo('oc2')">Đọc tiếp bí mật →</button>`;},1800);
+  } else {
+    fb.innerHTML=`<span style="color:#ddd6fe">${scrollData[i].msg}</span><br><small style="color:#a78bfa;margin-top:6px;display:block;">Hãy chú ý — Ánh trăng luôn chứa bí mật sâu nhất.</small>`;
+    fb.className='s';
+    setTimeout(()=>{
+      cards.forEach(c=>{c.classList.remove('pick','reveal-ok','reveal-no');c.style.pointerEvents='';});
+      scrollDone=false;fb.className='';fb.innerHTML='';
+    },2600);
+  }
+}
+
+let mirrorChoice=null;
+function pickMirror(i,ok){
+  if(mirrorDone)return;
+  mirrorDone=true;
+  document.querySelectorAll('.ob').forEach((b,bi)=>{b.disabled=true;if(bi===i)b.classList.add(ok?'ok':'no');});
+  const fb=document.getElementById('ofb');
+  const opts=['Người hay phán xét người khác','Người hay giả vờ hạnh phúc','Người sợ bị bỏ lại một mình','Người không tin vào chính mình'];
+  if(ok){
+    fb.innerHTML=`<strong style="color:#4ade80">Chiếc gương không nói dối.</strong><br><br>
+<span style="color:#ddd6fe">Người hay giả vờ hạnh phúc — họ không hạnh phúc thật sự, nhưng nụ cười của họ làm người khác cảm thấy nhẹ nhõm. Đó vừa là quà tặng, vừa là gánh nặng họ mang một mình.</span><br><br>
+<em style="color:#c4b5fd">Cú nhìn chằm chằm vào gương rồi thì thầm: "Ta biết người đó là ai."</em>`;
+    fb.className='s';
+    setTimeout(()=>{document.getElementById('och').innerHTML=`<button class="ob ok" onclick="ogo('oc3')">Tiếp tục →</button>`;},2200);
+  } else {
+    fb.innerHTML=`<span style="color:#ddd6fe">"${opts[i]}..."</span><br><br><em style="color:#c4b5fd">Cú lắc đầu. "Chiếc gương không nhìn thấy điều đó lần này. Hãy nhìn kỹ hơn."</em><br><small style="color:#a78bfa;margin-top:6px;display:block;">Hãy thử lại.</small>`;
+    fb.className='s';
+    setTimeout(()=>{document.querySelectorAll('.ob').forEach(b=>{b.disabled=false;b.classList.remove('ok','no');});mirrorDone=false;fb.className='';fb.innerHTML='';},2600);
+  }
+}
+
+function pickVoice(i,ok){
+  if(voiceDone)return;
+  voiceDone=true;
+  document.querySelectorAll('.ob').forEach((b,bi)=>{b.disabled=true;if(bi===i)b.classList.add(ok?'ok':'no');});
+  const fb=document.getElementById('ofb');
+  const voices=['Tiếng khóc mà không ai nghe thấy','Lời xin lỗi chưa bao giờ được nói ra','Câu hỏi mà người ta sợ hỏi','Lời cảm ơn đến quá muộn'];
+  if(ok){
+    fb.innerHTML=`<strong style="color:#4ade80">Đúng rồi...</strong><br><br>
+<span style="color:#ddd6fe">Lời xin lỗi chưa bao giờ được nói ra — đó là thứ nặng nhất người ta mang theo. Không phải vì không muốn nói, mà vì sợ đã quá muộn, sợ bị từ chối, sợ phải đối mặt với điều mình đã gây ra.</span><br><br>
+<em style="color:#c4b5fd">"Ta đã nghe tất cả những lời đó trong đêm tối. Chúng lơ lửng trong không khí — không bao giờ đến nơi cần đến."</em>`;
+    fb.className='s';
+    setTimeout(()=>{document.getElementById('och').innerHTML=`<button class="ob ok" onclick="ogo('oc4')">Tiếp tục →</button>`;},2200);
+  } else {
+    fb.innerHTML=`<em style="color:#c4b5fd">"${voices[i]}..."</em><br><br><span style="color:#ddd6fe">Cú gật đầu chậm rãi. "Thứ đó tồn tại — nhưng không phải nặng nhất. Hãy lắng nghe bóng đêm thêm lần nữa."</span><br><small style="color:#a78bfa;margin-top:6px;display:block;">Hãy thử lại.</small>`;
+    fb.className='s';
+    setTimeout(()=>{document.querySelectorAll('.ob').forEach(b=>{b.disabled=false;b.classList.remove('ok','no');});voiceDone=false;fb.className='';fb.innerHTML='';},2600);
+  }
+}
+
+function osubmit(){
+  const v=document.getElementById('otxt').value.trim();
+  if(!v)return;
+  document.getElementById('oinp').innerHTML=`<div style="padding:12px 0;text-align:center;">
+    <em style="color:#ddd6fe;font-size:15px;font-family:Georgia,serif;">"${v}"</em><br><br>
+    <span style="color:#a78bfa;font-size:13px;font-family:sans-serif;display:block;margin-top:6px;">Cú nhắm mắt lại.</span>
+    <span style="color:#c4b5fd;font-size:13px;font-family:sans-serif;display:block;margin-top:4px;">"Đây là điều thư viện chưa từng có."</span>
+  </div>
+  <button class="osub" style="margin-top:14px" onclick="ogo('oe')">Xem kết thúc...</button>`;
+}
+
+function ogo(id){
+  document.getElementById('ofb').className='';document.getElementById('ofb').innerHTML='';
+  scrollDone=false;mirrorDone=false;voiceDone=false;
+  orender(id);
+}
+
+const ochaps=[
+  {id:'oi',prog:5,art:drawOwlIntro,title:'Tuyến Cú',name:'Thư Viện Của Những Bí Mật Chưa Được Nói',
+   lines:[
+    {t:'Cú không nói. Cú nhìn.'},
+    {t:'Đôi mắt vàng như mặt trăng thu nhỏ — nhìn xuyên qua mọi thứ.'},
+    {t:'"Ta biết tất cả những gì người chưa dám nói."',d:1},
+    {t:'"Ta biết những gì người chưa dám nghĩ."',d:1},
+    {t:'"Câu hỏi là — người có dám nghe sự thật không?"',d:1},
+   ],choices:[{l:'Dám.',n:'oc1'}]},
+
+  {id:'oc1',prog:18,art:drawOwlLibrary,title:'Chương 1',name:'Thư Viện Những Điều Chưa Nói',
+   lines:[
+    {t:'Cú dẫn người chơi vào một thư viện không có tường — chỉ có những cuốn sách lơ lửng trong bóng tối.'},
+    {t:'Mỗi cuốn sách là một bí mật của một người nào đó.'},
+    {t:'"Tất cả đều được viết vào đây,"',d:1},
+    {t:'"vào khoảnh khắc người ta không dám nói thành lời."',d:1},
+   ],type:'scrolls'},
+
+  {id:'oc2',prog:36,art:drawOwlMirror,title:'Chương 2',name:'Chiếc Gương Không Nói Dối',
+   lines:[
+    {t:'Sâu trong thư viện có một chiếc gương đặc biệt.'},
+    {t:'Nó không phản chiếu khuôn mặt — nó phản chiếu sự thật bên trong.'},
+    {t:'Cú hỏi:',},
+    {t:'"Người nào trong đời thật sự cô đơn nhất?"',d:1},
+   ],type:'mirror',
+   choices:[
+    {l:'Người hay phán xét người khác'},
+    {l:'Người hay giả vờ hạnh phúc',ok:1},
+    {l:'Người sợ bị bỏ lại một mình'},
+    {l:'Người không tin vào chính mình'},
+   ]},
+
+  {id:'oc3',prog:54,art:drawOwlScrolls,title:'Chương 3',name:'Giọng Nói Trong Bóng Đêm',
+   lines:[
+    {t:'Cú hỏi người chơi ngồi xuống và lắng nghe.'},
+    {t:'Trong đêm tối — có những âm thanh không ai nghe thấy.'},
+    {t:'"Thứ nào nặng nhất?"',d:1},
+    {t:'"Thứ nào khiến người ta không ngủ được vào lúc 3 giờ sáng?"',d:1},
+   ],type:'voice',
+   choices:[
+    {l:'Tiếng khóc mà không ai nghe thấy'},
+    {l:'Lời xin lỗi chưa bao giờ được nói ra',ok:1},
+    {l:'Câu hỏi mà người ta sợ hỏi'},
+    {l:'Lời cảm ơn đến quá muộn'},
+   ]},
+
+  {id:'oc4',prog:72,art:drawOwlSecret,title:'Chương 4',name:'Bí Mật Của Cú',
+   lines:[
+    {t:'Cú đứng im rất lâu trước khi nói.'},
+    {t:'"Ta biết bí mật của Thỏ — nó chạy vì sợ yêu."',d:1},
+    {t:'"Ta biết bí mật của Cáo — nó thắng vì sợ thua."',d:1},
+    {t:'"Ta biết bí mật của Gấu — nó ngủ vì sợ thức."',d:1},
+    {t:'"Còn bí mật của ta..."',d:1},
+    {t:'"Ta biết tất cả — nhưng ta không có ai để kể."',d:1},
+   ],choices:[{l:'Tiếp tục...',n:'oc5'}]},
+
+  {id:'oc5',prog:88,art:drawOwlMirror,title:'Chương Cuối',name:'Điều Cú Chưa Bao Giờ Được Hỏi',
+   lines:[
+    {t:'Lần đầu tiên trong ngàn năm — Cú không hỏi. Cú đợi.'},
+    {t:'Nó nhìn người chơi với đôi mắt không còn bí ẩn nữa.'},
+    {t:'"Không ai từng hỏi ta..."',d:1},
+    {t:'"Cú ơi, người cảm thấy thế nào?"',d:1},
+    {t:'Vậy — người cảm thấy thế nào khi nghe câu chuyện của Cú?',r:1},
+   ],type:'input'},
+
+  {id:'oe',prog:100,art:drawOwlEnd,title:'Kết Thúc',name:'Cú không còn cô đơn trong đêm tối',
+   lines:[
+    {t:'"Ta đã giữ bí mật của cả khu rừng."',d:1},
+    {t:'"Nhưng hôm nay người đã giữ bí mật của ta."',d:1},
+    {t:'"Và đó là thứ ta không ngờ mình cần đến vậy."',d:1},
+    {t:'"Cảm ơn vì đã hỏi."',d:1},
+   ],type:'ending'},
+];
+
+function orender(id){
+  const ch=ochaps.find(c=>c.id===id);if(!ch)return;
+  document.getElementById('opf').style.width=ch.prog+'%';
+  document.getElementById('oct').textContent=ch.title||'Tuyến Cú';
+  document.getElementById('ocn').textContent=ch.name||'';
+  const ae=document.getElementById('oart');ae.innerHTML='';ch.art(ae);
+  const ne=document.getElementById('onarr');ne.innerHTML='';
+  ch.lines.forEach((l,i)=>{
+    const s=document.createElement('span');
+    s.className='ol'+(l.d?' d':'')+(l.w?' w':'')+(l.r?' r':'');
+    s.textContent=l.t;ne.appendChild(s);
+    setTimeout(()=>s.classList.add('v'),180+i*280);
+  });
+  const ce=document.getElementById('och');ce.innerHTML='';
+  const ie=document.getElementById('oinp');ie.style.display='none';ie.innerHTML='';
+  const delay=ch.lines.length*280+380;
+
+  if(ch.type==='scrolls'){
+    scrollDone=false;
+    setTimeout(()=>{
+      const g=document.createElement('div');g.className='scroll-grid';
+      scrollData.forEach((s,i)=>{
+        const c=document.createElement('div');c.className='scroll-card';
+        c.innerHTML=`<span class="scroll-icon">${s.icon}</span><strong style="color:#ede9fe;font-size:13px;">${s.label}</strong><div class="scroll-sub">${s.sub}</div>`;
+        c.onclick=()=>pickScroll(i);g.appendChild(c);
+      });
+      ce.appendChild(g);
+    },delay);
+  } else if(ch.type==='mirror'){
+    mirrorDone=false;
+    setTimeout(()=>{ch.choices.forEach((c,i)=>{const b=document.createElement('button');b.className='ob';b.textContent=c.l;b.onclick=()=>pickMirror(i,!!c.ok);ce.appendChild(b);});},delay);
+  } else if(ch.type==='voice'){
+    voiceDone=false;
+    setTimeout(()=>{ch.choices.forEach((c,i)=>{const b=document.createElement('button');b.className='ob';b.textContent=c.l;b.onclick=()=>pickVoice(i,!!c.ok);ce.appendChild(b);});},delay);
+  } else if(ch.type==='input'){
+    setTimeout(()=>{
+      ie.style.display='block';
+      ie.innerHTML=`<textarea id="otxt" placeholder="Nói với Cú điều người cảm thấy..."></textarea>
+      <button class="osub" onclick="osubmit()">Trả lời Cú ✦</button>`;
+    },delay);
+  } else if(ch.type==='ending'){
+    setTimeout(()=>{
+      ce.innerHTML=`<div id="odiary">
+        <h3>📖 Nhật Ký Số 4 Đã Mở Khóa</h3>
+        <p>"Người biết tất cả bí mật của thế giới<br>đôi khi là người cô đơn nhất.<br>Vì không ai nghĩ rằng kẻ thông thái<br>cũng cần được hỏi: 'Bạn có ổn không?'"</p>
+        <div style="margin-top:14px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
+          <button class="onxt" onclick="sendPrompt('Tôi đã hoàn thành cả 4 tuyến Thỏ, Cáo, Gấu, Cú. Hãy tiết lộ bí ẩn lớn liên kết 4 nhân vật và kết thúc thật sự của game!')">Giải mã bí ẩn 4 nhân vật ↗</button>
+        </div>
+      </div>`;
+    },delay);
+  } else if(ch.choices){
+    setTimeout(()=>{ch.choices.forEach(c=>{const b=document.createElement('button');b.className='ob';b.textContent=c.l;b.onclick=()=>ogo(c.n);ce.appendChild(b);});},delay);
+  }
+}
+
+addMoonLight();
+orender('oi');
+</script>

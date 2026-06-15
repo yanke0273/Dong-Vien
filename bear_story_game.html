@@ -1,0 +1,434 @@
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+#bg-game{width:100%;min-height:720px;background:#0a0f1a;border-radius:16px;overflow:hidden;position:relative;font-family:'Georgia',serif;}
+#bg-panel{position:relative;z-index:5;display:flex;flex-direction:column;align-items:center;}
+#bg-hdr{text-align:center;padding:26px 20px 0;width:100%;}
+#bg-ct{color:#93c5fd;font-size:11px;letter-spacing:3px;font-family:sans-serif;margin-bottom:5px;}
+#bg-cn{color:#e0f2fe;font-size:20px;line-height:1.4;}
+#bg-art{margin:18px auto 0;width:280px;height:170px;flex-shrink:0;}
+#bg-narr{max-width:520px;width:90%;margin:16px auto 0;text-align:center;}
+.bg-l{color:#bfdbfe;font-size:15px;line-height:1.85;opacity:0;transform:translateY(8px);transition:opacity .5s,transform .5s;font-style:italic;display:block;margin:2px 0;}
+.bg-l.v{opacity:1;transform:none;}
+.bg-l.d{color:#bae6fd;font-style:normal;}
+.bg-l.w{color:#fef9c3;font-style:normal;}
+#bg-fb{max-width:480px;width:90%;margin:14px auto 0;background:#0c1a2e;border:1px solid rgba(147,197,253,.4);border-radius:14px;padding:16px 20px;color:#bfdbfe;font-size:14px;line-height:1.7;font-family:sans-serif;display:none;}
+#bg-fb.s{display:block;}
+#bg-ch{max-width:500px;width:90%;margin:18px auto 0;display:flex;flex-direction:column;gap:10px;padding-bottom:28px;}
+.bg-btn{background:#0c1a2e;border:1px solid rgba(147,197,253,.4);border-radius:12px;color:#bfdbfe;font-size:14px;padding:13px 18px;cursor:pointer;font-family:'Georgia',serif;text-align:left;transition:all .25s;line-height:1.5;}
+.bg-btn:hover{background:#112236;border-color:#93c5fd;transform:translateX(4px);}
+.bg-btn.ok{border-color:#4ade80;background:#0a1f10;color:#bbf7d0;}
+.bg-btn.no{border-color:#f87171;background:#1f0a0a;color:#fca5a5;}
+.bg-btn:disabled{cursor:default;}
+#bg-prog{position:absolute;top:0;left:0;right:0;height:3px;background:rgba(255,255,255,.1);z-index:20;}
+#bg-pf{height:100%;background:#3b82f6;transition:width .6s ease;border-radius:0 2px 2px 0;}
+#bg-inp{max-width:460px;width:90%;margin:18px auto 0;padding-bottom:28px;display:none;}
+#bg-txt{width:100%;background:#0c1a2e;border:1px solid rgba(147,197,253,.45);border-radius:12px;color:#bfdbfe;font-size:15px;padding:13px 17px;font-family:'Georgia',serif;resize:none;height:75px;outline:none;}
+#bg-txt:focus{border-color:#93c5fd;}
+#bg-txt::placeholder{color:rgba(147,197,253,.35);}
+.bg-sub{margin-top:10px;width:100%;background:#112236;border:1px solid rgba(147,197,253,.5);border-radius:12px;color:#bfdbfe;font-size:14px;padding:11px;cursor:pointer;font-family:'Georgia',serif;transition:all .25s;}
+.bg-sub:hover{background:#17304d;}
+#bg-diary{max-width:460px;width:90%;margin:0 auto 28px;background:#0c1a2e;border:1px solid rgba(147,197,253,.35);border-radius:16px;padding:22px;text-align:center;}
+#bg-diary h3{color:#e0f2fe;font-size:17px;margin-bottom:10px;}
+#bg-diary p{color:#7dd3fc;font-size:13px;line-height:1.7;font-family:sans-serif;}
+.bg-nxt{margin-top:12px;background:#112236;border:1px solid rgba(147,197,253,.45);border-radius:10px;color:#bfdbfe;font-size:13px;padding:10px 18px;cursor:pointer;font-family:sans-serif;transition:all .2s;display:inline-block;margin-right:6px;}
+.bg-nxt:hover{background:#17304d;}
+.dream-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:480px;width:90%;margin:16px auto 0;padding-bottom:6px;}
+.dream-card{background:#0c1a2e;border:1px solid rgba(147,197,253,.3);border-radius:12px;padding:14px 16px;cursor:pointer;transition:all .25s;color:#bfdbfe;font-size:13px;font-family:sans-serif;line-height:1.6;text-align:center;}
+.dream-card:hover{background:#112236;border-color:#93c5fd;}
+.dream-card.pick{border-color:#fbbf24;background:#1a1600;}
+.dream-card .dream-icon{font-size:26px;margin-bottom:6px;display:block;}
+.dream-card .dream-lbl{color:#7dd3fc;font-size:12px;margin-top:4px;}
+.snow-flake{position:absolute;pointer-events:none;color:rgba(186,230,253,.5);font-size:var(--s);animation:snowfall var(--d) linear infinite;top:var(--top);left:var(--left);}
+@keyframes snowfall{0%{transform:translateY(-20px) rotate(0deg);opacity:0;}10%{opacity:1;}90%{opacity:.6;}100%{transform:translateY(720px) rotate(360deg);opacity:0;}}
+</style>
+
+<style>
+.back-btn{
+  position:absolute;top:20px;left:20px;z-index:25;
+  background:rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.2);
+  color:#93c5fd;
+  padding:8px 16px;
+  border-radius:12px;
+  cursor:pointer;
+  font-family:'Georgia',serif;
+  font-size:13px;
+  transition:all 0.3s;
+  text-decoration:none;
+  display:inline-block;
+}
+.back-btn:hover{
+  background:rgba(255,255,255,0.18);
+  border-color:rgba(255,255,255,0.5);
+}
+</style>
+<div id="bg-game">
+  <a href="index.html" class="back-btn">← Quay lại rừng</a>
+  <div id="bg-prog"><div id="bg-pf" style="width:0%"></div></div>
+  <div id="bg-panel">
+    <div id="bg-hdr">
+      <div id="bg-ct">Tuyến Gấu</div>
+      <div id="bg-cn">Khu Rừng Giấc Ngủ Ngàn Năm</div>
+    </div>
+    <div id="bg-art"></div>
+    <div id="bg-narr"></div>
+    <div id="bg-fb"></div>
+    <div id="bg-ch"></div>
+    <div id="bg-inp"></div>
+  </div>
+</div>
+
+<script>
+function addSnow(){
+  const g=document.getElementById('bg-game');
+  for(let i=0;i<18;i++){
+    const s=document.createElement('div');
+    s.className='snow-flake';
+    s.textContent='❄';
+    s.style.cssText=`--s:${10+Math.random()*14}px;--d:${6+Math.random()*10}s;--top:${-20+Math.random()*-60}px;--left:${Math.random()*100}%;animation-delay:${Math.random()*8}s;`;
+    g.appendChild(s);
+  }
+}
+
+function drawBearIntro(el){el.innerHTML=`<svg width="280" height="170" viewBox="0 0 280 170"><rect width="280" height="170" fill="#0a0f1a" rx="12"/>
+<ellipse cx="140" cy="152" rx="115" ry="24" fill="#050a12"/>
+<rect x="20" y="50" width="12" height="100" fill="#1e3a5f"/><ellipse cx="26" cy="36" rx="22" ry="36" fill="#0c2d4a"/>
+<rect x="248" y="60" width="12" height="90" fill="#1e3a5f"/><ellipse cx="254" cy="46" rx="20" ry="32" fill="#0c2d4a"/>
+<circle cx="140" cy="28" r="22" fill="#bfdbfe" opacity=".12"/><circle cx="140" cy="28" r="14" fill="#bfdbfe" opacity=".25"/><circle cx="140" cy="28" r="7" fill="#dbeafe" opacity=".5"/>
+<circle cx="55" cy="16" r="1.5" fill="#bfdbfe" opacity=".6"/><circle cx="90" cy="8" r="1" fill="#bfdbfe" opacity=".5"/><circle cx="200" cy="12" r="1.5" fill="#bfdbfe" opacity=".7"/><circle cx="240" cy="22" r="1" fill="#bfdbfe" opacity=".5"/>
+<ellipse cx="140" cy="122" rx="30" ry="24" fill="#5b3e2b"/>
+<ellipse cx="122" cy="106" rx="12" ry="12" fill="#5b3e2b"/><ellipse cx="158" cy="106" rx="12" ry="12" fill="#5b3e2b"/>
+<ellipse cx="140" cy="120" rx="22" ry="18" fill="#7c5235"/>
+<circle cx="133" cy="116" r="4" fill="#1a0f06"/><circle cx="147" cy="116" r="4" fill="#1a0f06"/>
+<circle cx="133.8" cy="115.2" r="1.5" fill="white"/><circle cx="147.8" cy="115.2" r="1.5" fill="white"/>
+<ellipse cx="140" cy="121" rx="5" ry="3" fill="#1a0f06"/>
+<ellipse cx="122" cy="103" rx="6" ry="6" fill="#4a2e18"/>
+<ellipse cx="158" cy="103" rx="6" ry="6" fill="#4a2e18"/>
+<line x1="128" y1="123" x2="110" y2="125" stroke="#888" stroke-width=".8"/>
+<line x1="152" y1="123" x2="170" y2="125" stroke="#888" stroke-width=".8"/>
+<ellipse cx="140" cy="138" rx="32" ry="12" fill="#5b3e2b" opacity=".6"/>
+<text x="140" y="163" text-anchor="middle" fill="#7dd3fc" font-size="10" font-family="sans-serif">Gấu đang ngủ... hay đang mơ?</text></svg>`;}
+
+function drawBearDoor(el){el.innerHTML=`<svg width="280" height="170" viewBox="0 0 280 170"><rect width="280" height="170" fill="#0a0f1a" rx="12"/>
+<ellipse cx="140" cy="155" rx="120" ry="20" fill="#050a12"/>
+<rect x="30" y="40" width="10" height="110" fill="#1e3a5f"/><ellipse cx="35" cy="26" rx="18" ry="28" fill="#0c2d4a"/>
+<rect x="240" y="50" width="10" height="100" fill="#1e3a5f"/><ellipse cx="245" cy="36" rx="16" ry="24" fill="#0c2d4a"/>
+<rect x="100" y="35" width="80" height="115" rx="40" fill="#0c1a2e" stroke="#3b82f6" stroke-width="1.5"/>
+<rect x="104" y="39" width="72" height="107" rx="36" fill="#071020"/>
+<circle cx="118" cy="88" r="4" fill="#fbbf24" opacity=".85"/>
+<circle cx="104" cy="72" r="3" fill="#93c5fd" opacity=".6"/>
+<circle cx="175" cy="95" r="3" fill="#a78bfa" opacity=".7"/>
+<circle cx="150" cy="60" r="2.5" fill="#34d399" opacity=".6"/>
+<circle cx="128" cy="108" r="2" fill="#fb923c" opacity=".6"/>
+<circle cx="162" cy="115" r="3" fill="#f472b6" opacity=".6"/>
+<circle cx="140" cy="90" r="10" fill="#1d4ed8" opacity=".3" stroke="#60a5fa" stroke-width=".8"/>
+<text x="140" y="163" text-anchor="middle" fill="#7dd3fc" font-size="10" font-family="sans-serif">Cửa vào giấc mơ</text></svg>`;}
+
+function drawBearDream(el){el.innerHTML=`<svg width="280" height="170" viewBox="0 0 280 170"><rect width="280" height="170" fill="#0a0f1a" rx="12"/>
+<circle cx="140" cy="85" r="60" fill="#0c1a2e" stroke="#3b82f6" stroke-width=".8" opacity=".7"/>
+<circle cx="140" cy="85" r="45" fill="#071020" stroke="#6366f1" stroke-width=".6" opacity=".6"/>
+<circle cx="118" cy="68" r="8" fill="#1d4ed8" opacity=".7"/><text x="118" y="72" text-anchor="middle" fill="#bfdbfe" font-size="10" font-family="sans-serif">☁</text>
+<circle cx="162" cy="72" r="7" fill="#7c3aed" opacity=".7"/><text x="162" y="76" text-anchor="middle" fill="#e9d5ff" font-size="10" font-family="sans-serif">★</text>
+<circle cx="128" cy="102" r="7" fill="#0891b2" opacity=".7"/><text x="128" y="106" text-anchor="middle" fill="#a5f3fc" font-size="10" font-family="sans-serif">♫</text>
+<circle cx="155" cy="100" r="8" fill="#166534" opacity=".7"/><text x="155" y="104" text-anchor="middle" fill="#bbf7d0" font-size="10" font-family="sans-serif">✿</text>
+<circle cx="140" cy="85" r="4" fill="#fbbf24" opacity=".9"/>
+<text x="140" y="163" text-anchor="middle" fill="#7dd3fc" font-size="10" font-family="sans-serif">Bốn mảnh ký ức</text></svg>`;}
+
+function drawBearMemory(el){el.innerHTML=`<svg width="280" height="170" viewBox="0 0 280 170"><rect width="280" height="170" fill="#0a0f1a" rx="12"/>
+<rect x="60" y="30" width="75" height="55" rx="6" fill="#0c1a2e" stroke="#3b82f6" stroke-width=".8"/>
+<circle cx="97" cy="55" r="16" fill="#1d4ed8" opacity=".4"/>
+<text x="97" y="60" text-anchor="middle" fill="#bfdbfe" font-size="18" font-family="Georgia,serif">♡</text>
+<text x="97" y="77" text-anchor="middle" fill="#7dd3fc" font-size="9" font-family="sans-serif">Tình thương</text>
+<rect x="145" y="30" width="75" height="55" rx="6" fill="#0c1a2e" stroke="#6366f1" stroke-width=".8"/>
+<circle cx="182" cy="55" r="16" fill="#4c1d95" opacity=".4"/>
+<text x="182" y="60" text-anchor="middle" fill="#e9d5ff" font-size="18" font-family="Georgia,serif">✦</text>
+<text x="182" y="77" text-anchor="middle" fill="#c4b5fd" font-size="9" font-family="sans-serif">Ước mơ</text>
+<rect x="60" y="95" width="75" height="55" rx="6" fill="#0c1a2e" stroke="#0891b2" stroke-width=".8"/>
+<circle cx="97" cy="120" r="16" fill="#0c4a6e" opacity=".4"/>
+<text x="97" y="125" text-anchor="middle" fill="#a5f3fc" font-size="18" font-family="Georgia,serif">☽</text>
+<text x="97" y="142" text-anchor="middle" fill="#7dd3fc" font-size="9" font-family="sans-serif">Nỗi cô đơn</text>
+<rect x="145" y="95" width="75" height="55" rx="6" fill="#0c1a2e" stroke="#166534" stroke-width=".8"/>
+<circle cx="182" cy="120" r="16" fill="#052e16" opacity=".4"/>
+<text x="182" y="125" text-anchor="middle" fill="#bbf7d0" font-size="18" font-family="Georgia,serif">✿</text>
+<text x="182" y="142" text-anchor="middle" fill="#86efac" font-size="9" font-family="sans-serif">Hy vọng</text>
+<text x="140" y="163" text-anchor="middle" fill="#7dd3fc" font-size="10" font-family="sans-serif">Những mảnh ký ức của Gấu</text></svg>`;}
+
+function drawBearStar(el){el.innerHTML=`<svg width="280" height="170" viewBox="0 0 280 170"><rect width="280" height="170" fill="#0a0f1a" rx="12"/>
+<circle cx="80" cy="40" r="2" fill="#bfdbfe" opacity=".8"/>
+<circle cx="130" cy="20" r="3" fill="#bfdbfe" opacity=".7"/>
+<circle cx="180" cy="35" r="2" fill="#bfdbfe" opacity=".9"/>
+<circle cx="230" cy="15" r="1.5" fill="#bfdbfe" opacity=".6"/>
+<circle cx="50" cy="70" r="1.5" fill="#bfdbfe" opacity=".5"/>
+<circle cx="210" cy="60" r="2" fill="#bfdbfe" opacity=".7"/>
+<circle cx="60" cy="110" r="1.5" fill="#bfdbfe" opacity=".4"/>
+<circle cx="240" cy="90" r="2" fill="#bfdbfe" opacity=".6"/>
+<polygon points="140,38 145,55 162,55 149,65 154,82 140,72 126,82 131,65 118,55 135,55" fill="#fbbf24" opacity=".9"/>
+<circle cx="140" cy="60" r="8" fill="#fef3c7" opacity=".3"/>
+<line x1="140" y1="82" x2="140" y2="130" stroke="#bfdbfe" stroke-width=".8" stroke-dasharray="3,3" opacity=".5"/>
+<ellipse cx="140" cy="140" rx="30" ry="10" fill="#1e3a5f" opacity=".6"/>
+<ellipse cx="140" cy="138" rx="20" ry="8" fill="#7c5235" opacity=".7"/>
+<text x="140" y="163" text-anchor="middle" fill="#7dd3fc" font-size="10" font-family="sans-serif">Ngôi sao rơi xuống...</text></svg>`;}
+
+function drawBearWake(el){el.innerHTML=`<svg width="280" height="170" viewBox="0 0 280 170"><rect width="280" height="170" fill="#0a0f1a" rx="12"/>
+<rect x="0" y="110" width="280" height="60" fill="#0c2d4a" opacity=".5"/>
+<ellipse cx="140" cy="115" rx="120" ry="18" fill="#0c1a2e"/>
+<ellipse cx="140" cy="118" rx="30" ry="22" fill="#5b3e2b"/>
+<ellipse cx="124" cy="104" rx="11" ry="11" fill="#5b3e2b"/><ellipse cx="156" cy="104" rx="11" ry="11" fill="#5b3e2b"/>
+<ellipse cx="140" cy="116" rx="22" ry="17" fill="#7c5235"/>
+<circle cx="133" cy="113" r="4" fill="#1a0f06"/><circle cx="147" cy="113" r="4" fill="#1a0f06"/>
+<circle cx="133.8" cy="112.2" r="1.5" fill="white"/><circle cx="147.8" cy="112.2" r="1.5" fill="white"/>
+<circle cx="140" cy="28" r="22" fill="#fef3c7" opacity=".18"/><circle cx="140" cy="28" r="14" fill="#fef3c7" opacity=".35"/><circle cx="140" cy="28" r="7" fill="#fef9c3" opacity=".6"/>
+<path d="M120 68 Q130 55 140 60 Q150 55 160 68" fill="none" stroke="#fbbf24" stroke-width="1.2" opacity=".6"/>
+<circle cx="90" cy="45" r="2" fill="#bfdbfe" opacity=".6"/><circle cx="200" cy="38" r="1.5" fill="#bfdbfe" opacity=".5"/>
+<text x="140" y="163" text-anchor="middle" fill="#7dd3fc" font-size="10" font-family="sans-serif">Gấu thức giấc sau ngàn năm</text></svg>`;}
+
+function drawBearEnd(el){el.innerHTML=`<svg width="280" height="170" viewBox="0 0 280 170"><rect width="280" height="170" fill="#0a0f1a" rx="12"/>
+<circle cx="80" cy="35" r="4" fill="#bfdbfe" opacity=".7"/>
+<circle cx="130" cy="18" r="3" fill="#93c5fd" opacity=".8"/>
+<circle cx="190" cy="28" r="4" fill="#bfdbfe" opacity=".75"/>
+<circle cx="230" cy="14" r="2.5" fill="#60a5fa" opacity=".7"/>
+<circle cx="50" cy="65" r="2.5" fill="#bfdbfe" opacity=".5"/>
+<circle cx="55" cy="95" r="2" fill="#93c5fd" opacity=".6"/>
+<circle cx="240" cy="75" r="3" fill="#bfdbfe" opacity=".6"/>
+<circle cx="220" cy="105" r="2" fill="#60a5fa" opacity=".5"/>
+<polygon points="140,42 145,57 161,57 149,66 153,81 140,72 127,81 131,66 119,57 135,57" fill="#fbbf24" opacity=".85"/>
+<circle cx="140" cy="63" r="6" fill="#fef3c7" opacity=".25"/>
+<text x="140" y="135" text-anchor="middle" fill="#60a5fa" font-size="16" font-family="Georgia,serif">✦</text>
+<text x="105" y="120" text-anchor="middle" fill="#93c5fd" font-size="12" opacity=".7">✦</text>
+<text x="175" y="125" text-anchor="middle" fill="#3b82f6" font-size="10" opacity=".7">✦</text>
+<text x="140" y="163" text-anchor="middle" fill="#bfdbfe" font-size="11" font-family="sans-serif">Gấu mang theo giấc mơ mãi mãi</text></svg>`;}
+
+const dreamChoices=[
+  {icon:'☁',label:'Đám Mây Biết Hát',lbl:'giấc mơ về âm nhạc'},
+  {icon:'★',label:'Ngôi Sao Lạc Lối',lbl:'giấc mơ về hy vọng'},
+  {icon:'♫',label:'Dòng Sông Im Lặng',lbl:'giấc mơ về bình yên'},
+  {icon:'✿',label:'Khu Vườn Mùa Đông',lbl:'giấc mơ về ký ức'},
+];
+
+let dreamPicked=null,dreamDone=false;
+let memDone=false;
+let starDone=false;
+
+function pickDream(i){
+  if(dreamDone)return;
+  dreamDone=true;
+  dreamPicked=i;
+  document.querySelectorAll('.dream-card').forEach((c,ci)=>{
+    c.style.pointerEvents='none';
+    if(ci===i)c.classList.add('pick');
+  });
+  const fb=document.getElementById('bg-fb');
+  const d=dreamChoices[i];
+  fb.innerHTML=`Gấu mỉm cười trong giấc ngủ khi người chọn <em style="color:#7dd3fc">"${d.label}"</em>.<br><br>
+<span style="color:#bfdbfe">"Đây là ${d.lbl} ta đã ôm suốt ngàn năm qua..."</span><br><br>
+<em style="color:#bae6fd">Giấc mơ mở ra như một trang sách...</em>`;
+  fb.className='s';
+  setTimeout(()=>{document.getElementById('bg-ch').innerHTML=`<button class="bg-btn ok" onclick="bgo('bc2')">Bước vào giấc mơ →</button>`;},1800);
+}
+
+let memChoice=null;
+function pickMem(i,ok){
+  if(memDone)return;
+  memDone=true;
+  document.querySelectorAll('.bg-btn').forEach((b,bi)=>{b.disabled=true;if(bi===i)b.classList.add(ok?'ok':'no');});
+  const fb=document.getElementById('bg-fb');
+  const labels=['Tình thương','Ước mơ','Nỗi cô đơn','Hy vọng'];
+  const msgs={
+    0:`<span style="color:#bfdbfe">"Tình thương..."</span><br><br>Gấu lắc đầu nhẹ. <em style="color:#7dd3fc">"Tình thương không bao giờ là gánh nặng. Đó là thứ duy nhất khiến ta thức giấc."</em><br><small style="color:#93c5fd;margin-top:6px;display:block;">Hãy thử lại.</small>`,
+    1:`<span style="color:#bfdbfe">"Ước mơ..."</span><br><br>Gấu trầm ngâm. <em style="color:#7dd3fc">"Ước mơ có thể biến mất khi ta thức dậy. Nhưng thứ ta gánh không tan biến được."</em><br><small style="color:#93c5fd;margin-top:6px;display:block;">Hãy thử lại.</small>`,
+    2:`<strong style="color:#4ade80">Đúng rồi.</strong><br><br><span style="color:#bfdbfe">Gấu ngủ đông không phải vì lười biếng. Gấu ngủ vì nỗi cô đơn quá nặng để mang khi thức. Trong giấc ngủ, mọi thứ nhẹ hơn.</span><br><br><em style="color:#7dd3fc">"Ta ngủ để quên. Nhưng nỗi cô đơn vẫn theo ta vào từng giấc mơ."</em>`,
+    3:`<span style="color:#bfdbfe">"Hy vọng..."</span><br><br>Gấu mỉm cười buồn. <em style="color:#7dd3fc">"Hy vọng là thứ ta tìm kiếm, không phải thứ ta trốn chạy."</em><br><small style="color:#93c5fd;margin-top:6px;display:block;">Hãy thử lại.</small>`,
+  };
+  fb.innerHTML=msgs[i];fb.className='s';
+  if(ok){
+    setTimeout(()=>{document.getElementById('bg-ch').innerHTML=`<button class="bg-btn ok" onclick="bgo('bc3')">Tiếp tục →</button>`;},2000);
+  } else {
+    setTimeout(()=>{
+      document.querySelectorAll('.bg-btn').forEach(b=>{b.disabled=false;b.classList.remove('ok','no');});
+      memDone=false;fb.className='';fb.innerHTML='';
+    },2600);
+  }
+}
+
+function pickStar(i,ok){
+  if(starDone)return;
+  starDone=true;
+  document.querySelectorAll('.bg-btn').forEach((b,bi)=>{b.disabled=true;if(bi===i)b.classList.add(ok?'ok':'no');});
+  const fb=document.getElementById('bg-fb');
+  const starLabels=['Ước mơ thuở nhỏ bị bỏ lại','Người Gấu yêu thương đã rời đi','Lời hứa Gấu chưa giữ được','Phiên bản tốt hơn của chính Gấu'];
+  if(ok){
+    fb.innerHTML=`<strong style="color:#4ade80">Đúng rồi...</strong><br><br>
+<span style="color:#bfdbfe">Ngôi sao rơi không phải ngẫu nhiên. Đó là ${starLabels[i]} — thứ Gấu không thể giữ lại khi còn thức, nên đã hóa thành ánh sáng trong giấc ngủ.</span><br><br>
+<em style="color:#7dd3fc">"Ta đã ngủ để không phải nhìn nó rơi nữa..."</em>`;
+    fb.className='s';
+    setTimeout(()=>{document.getElementById('bg-ch').innerHTML=`<button class="bg-btn ok" onclick="bgo('bc4')">Tiếp tục →</button>`;},2000);
+  } else {
+    fb.innerHTML=`<span style="color:#bfdbfe">"${starLabels[i]}..."</span><br><br>Gấu lắc đầu nhẹ. <em style="color:#7dd3fc">"Không hẳn. Thứ rơi xuống là thứ Gấu không bao giờ nói ra."</em><br><small style="color:#93c5fd;margin-top:6px;display:block;">Hãy thử lại.</small>`;
+    fb.className='s';
+    setTimeout(()=>{
+      document.querySelectorAll('.bg-btn').forEach(b=>{b.disabled=false;b.classList.remove('ok','no');});
+      starDone=false;fb.className='';fb.innerHTML='';
+    },2600);
+  }
+}
+
+function bgsubmit(){
+  const v=document.getElementById('bg-txt').value.trim();
+  if(!v)return;
+  document.getElementById('bg-inp').innerHTML=`<div style="padding:12px 0;text-align:center;">
+    <em style="color:#bfdbfe;font-size:15px;font-family:Georgia,serif;">"${v}"</em><br><br>
+    <span style="color:#7dd3fc;font-size:13px;font-family:sans-serif;display:block;margin-top:6px;">Gấu nhắm mắt và mỉm cười.</span>
+    <span style="color:#93c5fd;font-size:13px;font-family:sans-serif;display:block;margin-top:4px;">"Ta đã chờ ai đó nói điều đó suốt ngàn năm qua."</span>
+  </div>
+  <button class="bg-sub" style="margin-top:14px" onclick="bgo('be')">Xem kết thúc...</button>`;
+}
+
+function bgo(id){
+  document.getElementById('bg-fb').className='';document.getElementById('bg-fb').innerHTML='';
+  dreamDone=false;memDone=false;starDone=false;
+  brender(id);
+}
+
+const bchaps=[
+  {id:'bi',prog:5,art:drawBearIntro,title:'Tuyến Gấu',name:'Khu Rừng Giấc Ngủ Ngàn Năm',
+   lines:[
+     {t:'Gấu không chào. Gấu chỉ ngủ.'},
+     {t:'Nhưng đôi mắt hé mở — như thể đang chờ đợi một điều gì đó.'},
+     {t:'"Người đã đến..."',d:1},
+     {t:'"Ta đã ngủ lâu lắm rồi. Lâu đến mức quên mất vì sao mình bắt đầu ngủ."',d:1},
+   ],choices:[{l:'Đi cùng Gấu vào giấc ngủ...',n:'bc1'}]},
+
+  {id:'bc1',prog:20,art:drawBearDoor,title:'Chương 1',name:'Cửa Vào Giấc Mơ',
+   lines:[
+     {t:'Trước mặt người chơi xuất hiện bốn cánh cửa — mỗi cái phát ra một màu ánh sáng khác nhau.'},
+     {t:'Gấu thì thầm:',},
+     {t:'"Đây là những giấc mơ ta đã từng có."',d:1},
+     {t:'"Người hãy chọn — giấc mơ nào người muốn bước vào?"',d:1},
+   ],type:'dream'},
+
+  {id:'bc2',prog:38,art:drawBearMemory,title:'Chương 2',name:'Mảnh Ký Ức Bị Mất',
+   lines:[
+     {t:'Bên trong giấc mơ là một căn phòng chứa đầy những chiếc hộp.'},
+     {t:'Mỗi hộp là một phần ký ức của Gấu.'},
+     {t:'Một hộp bị khóa. Gấu nhìn nó và nói:',},
+     {t:'"Đây là thứ ta không dám mở ra."',d:1},
+     {t:'"Người nghĩ bên trong là gì?"',d:1},
+   ],type:'memory',
+   choices:[{l:'Tình thương'},{l:'Ước mơ'},{l:'Nỗi cô đơn',ok:1},{l:'Hy vọng'}]},
+
+  {id:'bc3',prog:55,art:drawBearStar,title:'Chương 3',name:'Ngôi Sao Rơi Trong Giấc Ngủ',
+   lines:[
+     {t:'Trong sâu thẳm giấc mơ, người chơi thấy một ngôi sao đang rơi chậm rãi.'},
+     {t:'Nó không tắt — chỉ rơi mãi, không bao giờ chạm đất.'},
+     {t:'Gấu nói, giọng khẽ khàng:',},
+     {t:'"Ngôi sao đó là thứ ta đánh mất."',d:1},
+     {t:'"Người có biết đó là thứ gì không?"',d:1},
+   ],type:'star',
+   choices:[
+     {l:'Ước mơ thuở nhỏ bị bỏ lại'},
+     {l:'Người Gấu yêu thương đã rời đi'},
+     {l:'Lời hứa Gấu chưa giữ được',ok:1},
+     {l:'Phiên bản tốt hơn của chính Gấu'},
+   ]},
+
+  {id:'bc4',prog:72,art:drawBearWake,title:'Chương 4',name:'Bí Mật Của Gấu',
+   lines:[
+     {t:'Lần đầu tiên Gấu mở mắt hoàn toàn.'},
+     {t:'Ánh trăng chiếu vào đôi mắt nâu ấm áp — và buồn.'},
+     {t:'"Ta ngủ vì ta sợ thức dậy."',d:1},
+     {t:'"Sợ rằng khi thức, những người ta nhớ sẽ không còn ở đó nữa."',d:1},
+     {t:'"Sợ rằng thế giới đã thay đổi — mà chỉ có ta đứng yên."',d:1},
+   ],choices:[{l:'Tiếp tục...',n:'bc5'}]},
+
+  {id:'bc5',prog:88,art:drawBearStar,title:'Chương Cuối',name:'Điều Gấu Cần Nghe',
+   lines:[
+     {t:'Gấu ngồi xuống bên cạnh người chơi.'},
+     {t:'Lần đầu tiên — không cô đơn.'},
+     {t:'"Nếu người có thể nói một điều với ta..."',d:1},
+     {t:'"Một điều khiến ta dám thức dậy — đó sẽ là gì?"',d:1},
+   ],type:'input'},
+
+  {id:'be',prog:100,art:drawBearEnd,title:'Kết Thúc',name:'Gấu chọn thức dậy',
+   lines:[
+     {t:'"Ngàn năm ta ngủ vì sợ."',d:1},
+     {t:'"Nhưng giờ ta hiểu — nỗi sợ không biến mất khi ta nhắm mắt."',d:1},
+     {t:'"Nó chỉ theo ta vào từng giấc mơ."',d:1},
+     {t:'"Cảm ơn vì đã đánh thức ta."',d:1},
+   ],type:'ending'},
+];
+
+function brender(id){
+  const ch=bchaps.find(c=>c.id===id);if(!ch)return;
+  document.getElementById('bg-pf').style.width=ch.prog+'%';
+  document.getElementById('bg-ct').textContent=ch.title||'Tuyến Gấu';
+  document.getElementById('bg-cn').textContent=ch.name||'';
+  const ae=document.getElementById('bg-art');ae.innerHTML='';ch.art(ae);
+  const ne=document.getElementById('bg-narr');ne.innerHTML='';
+  ch.lines.forEach((l,i)=>{
+    const s=document.createElement('span');
+    s.className='bg-l'+(l.d?' d':'')+(l.w?' w':'');
+    s.textContent=l.t;ne.appendChild(s);
+    setTimeout(()=>s.classList.add('v'),180+i*270);
+  });
+  const ce=document.getElementById('bg-ch');ce.innerHTML='';
+  const ie=document.getElementById('bg-inp');ie.style.display='none';ie.innerHTML='';
+  const delay=ch.lines.length*270+380;
+
+  if(ch.type==='dream'){
+    dreamDone=false;
+    setTimeout(()=>{
+      const g=document.createElement('div');g.className='dream-grid';
+      dreamChoices.forEach((d,i)=>{
+        const c=document.createElement('div');c.className='dream-card';
+        c.innerHTML=`<span class="dream-icon">${d.icon}</span><strong style="color:#e0f2fe;font-size:13px;">${d.label}</strong><div class="dream-lbl">${d.lbl}</div>`;
+        c.onclick=()=>pickDream(i);g.appendChild(c);
+      });
+      ce.appendChild(g);
+    },delay);
+  } else if(ch.type==='memory'){
+    memDone=false;
+    setTimeout(()=>{
+      ch.choices.forEach((c,i)=>{
+        const b=document.createElement('button');b.className='bg-btn';b.textContent=c.l;
+        b.onclick=()=>pickMem(i,!!c.ok);ce.appendChild(b);
+      });
+    },delay);
+  } else if(ch.type==='star'){
+    starDone=false;
+    setTimeout(()=>{
+      ch.choices.forEach((c,i)=>{
+        const b=document.createElement('button');b.className='bg-btn';b.textContent=c.l;
+        b.onclick=()=>pickStar(i,!!c.ok);ce.appendChild(b);
+      });
+    },delay);
+  } else if(ch.type==='input'){
+    setTimeout(()=>{
+      ie.style.display='block';
+      ie.innerHTML=`<textarea id="bg-txt" placeholder="Nói điều đó với Gấu..."></textarea>
+      <button class="bg-sub" onclick="bgsubmit()">Đánh thức Gấu ✦</button>`;
+    },delay);
+  } else if(ch.type==='ending'){
+    setTimeout(()=>{
+      ce.innerHTML=`<div id="bg-diary">
+        <h3>📖 Nhật Ký Số 3 Đã Mở Khóa</h3>
+        <p>"Đôi khi người ta không ngủ vì mệt.<br>Họ ngủ vì thức dậy đau hơn.<br>Và can đảm nhất không phải là chiến đấu —<br>mà là dám mở mắt thêm một lần nữa."</p>
+        <div style="margin-top:14px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
+          <button class="bg-nxt" onclick="sendPrompt('Tôi đã hoàn thành tuyến Gấu! Hãy tạo tuyến truyện cho Cú mèo đêm 🦉')">Gặp 🦉 Cú Mèo Đêm ↗</button>
+          <button class="bg-nxt" onclick="sendPrompt('Tôi đã xong Thỏ, Cáo và Gấu. Bí ẩn liên kết 4 nhân vật là gì?')">Bí ẩn 4 nhân vật ↗</button>
+        </div>
+      </div>`;
+    },delay);
+  } else if(ch.choices){
+    setTimeout(()=>{
+      ch.choices.forEach(c=>{
+        const b=document.createElement('button');b.className='bg-btn';b.textContent=c.l;
+        b.onclick=()=>bgo(c.n);ce.appendChild(b);
+      });
+    },delay);
+  }
+}
+
+addSnow();
+brender('bi');
+</script>
